@@ -44,9 +44,12 @@
       return res.text();
     })
     .then(function (code) {
-      // O arquivo usa "export default", que é sintaxe de módulo ES.
-      // Aqui removemos isso para rodar como um script comum no navegador.
-      var cleaned = code.replace(/export\s+default\s+/, "");
+      // O arquivo usa "import"/"export default", que é sintaxe de módulo ES.
+      // Aqui removemos isso para rodar como um script comum no navegador,
+      // usando os hooks do objeto global React (carregado via CDN acima).
+      var cleaned = code
+        .replace(/^\s*import\s*\{([^}]+)\}\s*from\s*["']react["'];?\s*$/m, "const {$1} = React;")
+        .replace(/export\s+default\s+/, "");
       var compiled = Babel.transform(cleaned, { presets: ["react"] }).code;
 
       // Executa em escopo global, o que deixa FlashcardCatalog disponível a seguir
