@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flashcards — Outcomes Pre-Intermediate</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #006437; }
+</style>
+
+<!-- React (via CDN, sem precisar instalar nada) -->
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+<!-- Babel: converte o JSX do arquivo do app para JS puro, direto no navegador -->
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+
+<div id="root"></div>
+
+<!-- O app de flashcards em si -->
+<script type="text/babel" data-type="module" src="flashcards-ingles.jsx"></script>
+
+<!-- "Liga" o componente na página -->
+<script type="text/babel" data-type="module">
+  import FlashcardCatalog from "./flashcards-ingles.jsx";
+  const root = ReactDOM.createRoot(document.getElementById("root"));
+  root.render(<FlashcardCatalog />);
+</script>
+
+</body>
+</html>
