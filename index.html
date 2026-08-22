@@ -6,6 +6,15 @@
 <title>Flashcards — Outcomes Pre-Intermediate</title>
 <style>
   html, body { margin: 0; padding: 0; background: #006437; }
+  #error-box {
+    display: none;
+    color: #FFFFFF;
+    font-family: sans-serif;
+    padding: 24px;
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
 </style>
 
 <!-- React (via CDN, sem precisar instalar nada) -->
@@ -18,15 +27,41 @@
 <body>
 
 <div id="root"></div>
+<div id="error-box"></div>
 
-<!-- O app de flashcards em si -->
-<script type="text/babel" data-type="module" src="flashcards-ingles.jsx"></script>
+<script>
+  function showError(message) {
+    var box = document.getElementById("error-box");
+    box.style.display = "block";
+    box.innerText = "Não consegui carregar o app.\n\n" + message +
+      "\n\nConfira se o arquivo flashcards-ingles.jsx está no mesmo repositório, com esse nome exato.";
+    console.error(message);
+  }
 
-<!-- "Liga" o componente na página -->
-<script type="text/babel" data-type="module">
-  import FlashcardCatalog from "./flashcards-ingles.jsx";
-  const root = ReactDOM.createRoot(document.getElementById("root"));
-  root.render(<FlashcardCatalog />);
+  fetch("flashcards-ingles.jsx")
+    .then(function (res) {
+      if (!res.ok) throw new Error("Arquivo flashcards-ingles.jsx não encontrado (status " + res.status + ").");
+      return res.text();
+    })
+    .then(function (code) {
+      // O arquivo usa "export default", que é sintaxe de módulo ES.
+      // Aqui removemos isso para rodar como um script comum no navegador.
+      var cleaned = code.replace(/export\s+default\s+/, "");
+      var compiled = Babel.transform(cleaned, { presets: ["react"] }).code;
+
+      // Executa em escopo global, o que deixa FlashcardCatalog disponível a seguir
+      (0, eval)(compiled);
+
+      if (typeof FlashcardCatalog === "undefined") {
+        throw new Error("O componente FlashcardCatalog não foi encontrado no arquivo.");
+      }
+
+      var root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(React.createElement(FlashcardCatalog));
+    })
+    .catch(function (err) {
+      showError(err.message);
+    });
 </script>
 
 </body>
