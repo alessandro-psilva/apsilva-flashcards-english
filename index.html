@@ -38,7 +38,7 @@
     console.error(message);
   }
 
-  fetch("flashcards-ingles.jsx")
+  fetch("flashcards-ingles.jsx?v=" + Date.now())
     .then(function (res) {
       if (!res.ok) throw new Error("Arquivo flashcards-ingles.jsx não encontrado (status " + res.status + ").");
       return res.text();
