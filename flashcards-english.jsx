@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+const { useState, useMemo, useEffect } = React;
 
 const UNITS = [
   { id: 1, title: "Jobs" },
@@ -664,7 +664,7 @@ function SpeakButton({ text, color = "#006437", size = 16 }) {
   );
 }
 
-export default function FlashcardCatalog() {
+function FlashcardCatalog() {
   const [view, setView] = useState("study"); // 'study' | 'summary'
   const [unit, setUnit] = useState(1);
   const [category, setCategory] = useState("Todos");
