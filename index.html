@@ -55,7 +55,9 @@
       if (/^\s*(?:import|export)\b/m.test(cleaned)) {
         throw new Error("O arquivo usa import/export não suportado pelo carregador do app.");
       }
-      var compiled = Babel.transform(cleaned, { presets: ["react"] }).code;
+      var compiled = Babel.transform(cleaned, {
+        presets: [["react", { runtime: "classic" }]]
+      }).code;
 
       // Executa em escopo global, o que deixa FlashcardCatalog disponível a seguir
       (0, eval)(compiled);
