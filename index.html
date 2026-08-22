@@ -33,8 +33,7 @@
   function showError(message) {
     var box = document.getElementById("error-box");
     box.style.display = "block";
-    box.innerText = "Não consegui carregar o app.\n\n" + message +
-      "\n\nConfira se o arquivo flashcards-english.jsx está no mesmo repositório, com esse nome exato.";
+    box.innerText = "Não consegui carregar o app.\n\n" + message;
     console.error(message);
   }
 
@@ -48,8 +47,14 @@
       // Aqui removemos isso para rodar como um script comum no navegador,
       // usando os hooks do objeto global React (carregado via CDN acima).
       var cleaned = code
-        .replace(/^\s*import\s*\{([^}]+)\}\s*from\s*["']react["'];?\s*$/m, "const {$1} = React;")
-        .replace(/export\s+default\s+/, "");
+        .replace(/^\s*import\s+(?:(?:React\s*,\s*)?\{([^}]+)\}|React|\*\s+as\s+React)\s+from\s*["']react["'];?\s*$/gm, function (_, namedImports) {
+          return namedImports ? "const {" + namedImports + "} = React;" : "";
+        })
+        .replace(/export\s+default\s+/g, "");
+
+      if (/^\s*(?:import|export)\b/m.test(cleaned)) {
+        throw new Error("O arquivo usa import/export não suportado pelo carregador do app.");
+      }
       var compiled = Babel.transform(cleaned, { presets: ["react"] }).code;
 
       // Executa em escopo global, o que deixa FlashcardCatalog disponível a seguir
