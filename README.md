@@ -20,7 +20,7 @@ App de estudo de inglês (nível B1) feito sob medida para acompanhar o livro **
 ## Tecnologia
 
 - React (via CDN, sem build/npm)
-- Um único arquivo `flashcards-ingles.jsx`, carregado direto pelo `index.html` com Babel Standalone
+- Um único arquivo `flashcards-english.jsx`, carregado direto pelo `index.html` com Babel Standalone
 - Hospedado gratuitamente no GitHub Pages
 
 ## Estrutura do projeto
@@ -28,7 +28,7 @@ App de estudo de inglês (nível B1) feito sob medida para acompanhar o livro **
 ```
 apsilva-flashcards-english/
 ├── index.html            # carrega React e o app
-├── flashcards-ingles.jsx # componente principal (todo o app)
+├── flashcards-english.jsx # componente principal (todo o app)
 └── README.md
 ```
 
@@ -38,7 +38,7 @@ Não precisa de instalação. Basta abrir o `index.html` num navegador, ou usar 
 
 ## Atualizando o app
 
-Para atualizar depois de fazer mudanças no arquivo `flashcards-ingles.jsx`:
+Para atualizar depois de fazer mudanças no arquivo `flashcards-english.jsx`:
 
 1. Vá em **Add file → Upload files** neste repositório
 2. Suba o arquivo atualizado (substitui o antigo)

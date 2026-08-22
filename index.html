@@ -34,13 +34,13 @@
     var box = document.getElementById("error-box");
     box.style.display = "block";
     box.innerText = "Não consegui carregar o app.\n\n" + message +
-      "\n\nConfira se o arquivo flashcards-ingles.jsx está no mesmo repositório, com esse nome exato.";
+      "\n\nConfira se o arquivo flashcards-english.jsx está no mesmo repositório, com esse nome exato.";
     console.error(message);
   }
 
-  fetch("flashcards-ingles.jsx?v=" + Date.now())
+  fetch("flashcards-english.jsx?v=" + Date.now())
     .then(function (res) {
-      if (!res.ok) throw new Error("Arquivo flashcards-ingles.jsx não encontrado (status " + res.status + ").");
+      if (!res.ok) throw new Error("Arquivo flashcards-english.jsx não encontrado (status " + res.status + ").");
       return res.text();
     })
     .then(function (code) {
