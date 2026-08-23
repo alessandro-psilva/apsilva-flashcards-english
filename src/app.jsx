@@ -294,7 +294,9 @@ function FlashcardCatalog() {
             className="typewriter app-title"
             style={{ fontSize: 26, color: "#FFFFFF", margin: "0 0 12px", letterSpacing: "0.02em" }}
           >
-            {view === "home" || view === "music"
+            {view === "music"
+              ? "Music"
+              : view === "home"
               ? "Choose a level"
               : view === "summary"
               ? "Progress Summary"

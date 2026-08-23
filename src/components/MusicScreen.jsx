@@ -20,6 +20,7 @@ function MusicScreen({ songs }) {
       <select
         value={safeSelected}
         onChange={(e) => setSelected(Number(e.target.value))}
+        aria-label="Choose a song"
         className="plex"
         style={{
           display: "block",
