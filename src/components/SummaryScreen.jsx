@@ -19,15 +19,15 @@ function SummaryScreen({ units, cards, status, onSelectUnit, onReset }) {
         }}
       >
         <div className="plex" style={{ fontSize: 11, color: "#3F7A5C", letterSpacing: "0.06em", marginBottom: 6 }}>
-          PROGRESSO GERAL · {totalPct}% APRENDIDO
+          OVERALL PROGRESS · {totalPct}% LEARNED
         </div>
         <div style={{ display: "flex", height: 8, borderRadius: 4, overflow: "hidden", background: "#DDEEE3", marginBottom: 8 }}>
           <div style={{ width: totalCards ? `${(totalKnow / totalCards) * 100}%` : "0%", background: "#1F9D55" }} />
           <div style={{ width: totalCards ? `${(totalReview / totalCards) * 100}%` : "0%", background: "#D4AF37" }} />
         </div>
         <div className="plex" style={{ display: "flex", justifyContent: "space-between", fontSize: 11 }}>
-          <span style={{ color: "#1F9D55" }}>SABIA: {totalKnow}</span>
-          <span style={{ color: "#8A6D14" }}>REVISAR: {totalReview}</span>
+          <span style={{ color: "#1F9D55" }}>KNOWN: {totalKnow}</span>
+          <span style={{ color: "#8A6D14" }}>REVIEW: {totalReview}</span>
           <span style={{ color: "#006437" }}>TOTAL: {totalCards}</span>
         </div>
       </div>
@@ -82,7 +82,7 @@ function SummaryScreen({ units, cards, status, onSelectUnit, onReset }) {
             }}
           >
             <div style={{ fontSize: 13, color: "#8C2F2C", marginBottom: 12 }}>
-              Isso vai apagar todas as marcações de "já sei / revisar" das {units.length} unidades. Não tem como desfazer.
+              This will erase all "known / review" marks across all {units.length} units. This can't be undone.
             </div>
             <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
               <button
@@ -98,7 +98,7 @@ function SummaryScreen({ units, cards, status, onSelectUnit, onReset }) {
                   cursor: "pointer",
                 }}
               >
-                CANCELAR
+                CANCEL
               </button>
               <button
                 onClick={() => {
@@ -116,7 +116,7 @@ function SummaryScreen({ units, cards, status, onSelectUnit, onReset }) {
                   cursor: "pointer",
                 }}
               >
-                SIM, RESETAR
+                YES, RESET
               </button>
             </div>
           </div>
@@ -135,7 +135,7 @@ function SummaryScreen({ units, cards, status, onSelectUnit, onReset }) {
               cursor: "pointer",
             }}
           >
-            RESETAR PROGRESSO
+            RESET PROGRESS
           </button>
         )}
       </div>

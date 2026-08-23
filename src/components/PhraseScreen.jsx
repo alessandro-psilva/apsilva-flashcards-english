@@ -41,7 +41,7 @@ function PhraseScreen({ sentences }) {
   if (!sentences.length) {
     return (
       <div style={{ textAlign: "center", padding: 40, color: "#BFEAD2", fontStyle: "italic" }}>
-        Ainda não há frases para esta unidade.
+        No phrases yet for this unit.
       </div>
     );
   }
@@ -51,7 +51,7 @@ function PhraseScreen({ sentences }) {
         className="plex"
         style={{ fontSize: 11, color: "#BFEAD2", marginBottom: 14, padding: "0 4px", lineHeight: 1.6 }}
       >
-        Troque o que está <span style={{ fontStyle: "italic", color: "#D4AF37" }}>sublinhado</span> pela sua realidade e pratique falando em voz alta.
+        Swap the <span style={{ fontStyle: "italic", color: "#D4AF37" }}>underlined</span> part for your own reality and practice saying it out loud.
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         {sentences.map((sentence, i) => (

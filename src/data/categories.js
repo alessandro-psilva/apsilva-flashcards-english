@@ -1,5 +1,5 @@
-const CATEGORIES = ["Todos", "Vocabulário", "Gramática"];
+const CATEGORIES = ["All", "Vocabulary", "Grammar"];
 const CAT_STYLE = {
-  "Vocabulário": { ink: "#006437" },
-  "Gramática": { ink: "#8A6D14" },
+  "Vocabulary": { ink: "#006437" },
+  "Grammar": { ink: "#8A6D14" },
 };

@@ -1,6 +1,6 @@
 // Registro central de níveis do app. Cada entrada vira um item no menu
 // lateral; níveis sem "available: true" aparecem esmaecidos com um selo
-// "EM BREVE" e não podem ser abertos ainda.
+// "COMING SOON" e não podem ser abertos ainda.
 //
 // Para adicionar um nível novo:
 //   1. Crie src/data/levels/<nivel>.js com as unidades/cartas/frases desse

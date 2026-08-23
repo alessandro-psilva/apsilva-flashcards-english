@@ -1,11 +1,21 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Flashcards English</title>
 <style>
-  html, body { margin: 0; padding: 0; background: #006437; }
+  /* box-sizing: border-box everywhere — sem isso, padding somado a width:100%
+     em telas estreitas gera overflow horizontal (barra de rolagem lateral,
+     conteúdo cortado) em vez de simplesmente encolher junto com o layout. */
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #006437;
+    overflow-x: hidden;
+    width: 100%;
+  }
   #error-box {
     display: none;
     color: #FFFFFF;
@@ -34,7 +44,7 @@
   function showError(message) {
     var box = document.getElementById("error-box");
     box.style.display = "block";
-    box.innerText = "Não consegui carregar o app.\n\n" + message;
+    box.innerText = "Couldn't load the app.\n\n" + message;
     console.error(message);
   }
 
@@ -88,12 +98,12 @@
       var file = FILES[i];
       var res = await fetch(file + "?v=" + Date.now());
       if (!res.ok) {
-        throw new Error("Arquivo " + file + " não encontrado (status " + res.status + ").");
+        throw new Error("File " + file + " not found (status " + res.status + ").");
       }
       var code = await res.text();
       var cleaned = stripModuleSyntax(code);
       if (/^\s*(?:import|export)\b/m.test(cleaned)) {
-        throw new Error("O arquivo " + file + " usa import/export não suportado pelo carregador do app.");
+        throw new Error("File " + file + " uses import/export, which isn't supported by the app's loader.");
       }
       var compiled = Babel.transform(cleaned, {
         filename: file,
@@ -111,7 +121,7 @@
   loadAll()
     .then(function () {
       if (typeof FlashcardCatalog === "undefined") {
-        throw new Error("O componente FlashcardCatalog não foi encontrado (verifique src/app.jsx).");
+        throw new Error("The FlashcardCatalog component wasn't found (check src/app.jsx).");
       }
       var root = ReactDOM.createRoot(document.getElementById("root"));
       root.render(React.createElement(FlashcardCatalog));

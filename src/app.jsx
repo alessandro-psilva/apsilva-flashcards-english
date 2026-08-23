@@ -6,7 +6,7 @@ function FlashcardCatalog() {
   const [level, setLevel] = useState(DEFAULT_LEVEL);
   const [view, setView] = useState("home"); // 'home' | 'study' | 'quiz' | 'phrases' | 'music' | 'summary'
   const [unit, setUnit] = useState(1);
-  const [category, setCategory] = useState("Todos");
+  const [category, setCategory] = useState("All");
   const [reviewOnly, setReviewOnly] = useState(false);
   const [order, setOrder] = useState(() => getLevelData(DEFAULT_LEVEL).cards.map((c) => c.id));
   const [index, setIndex] = useState(0);
@@ -108,7 +108,7 @@ function FlashcardCatalog() {
     const filtered = CARDS.filter(
       (c) =>
         c.unit === unit &&
-        (category === "Todos" || c.cat === category) &&
+        (category === "All" || c.cat === category) &&
         (!reviewOnly || status[c.id] === "review")
     );
     const idSet = new Set(filtered.map((c) => c.id));
@@ -152,7 +152,7 @@ function FlashcardCatalog() {
 
   function openUnitFromSummary(u) {
     setUnit(u);
-    setCategory("Todos");
+    setCategory("All");
     setReviewOnly(false);
     setIndex(0);
     setFlipped(false);
@@ -201,7 +201,7 @@ function FlashcardCatalog() {
     setLevel(id);
     setOrder(data.cards.map((c) => c.id));
     setUnit(data.units[0]?.id ?? 1);
-    setCategory("Todos");
+    setCategory("All");
     setReviewOnly(false);
     setIndex(0);
     setFlipped(false);
@@ -212,6 +212,7 @@ function FlashcardCatalog() {
 
   return (
     <div
+      className="app-shell"
       style={{
         minHeight: "100vh",
         width: "100%",
@@ -256,6 +257,18 @@ function FlashcardCatalog() {
         @media (prefers-reduced-motion: reduce) {
           .flip-card, .cardbtn, .tab-btn, .unit-btn { transition: none !important; }
         }
+
+        /* Telas estreitas (celular): menos padding nas bordas e textos um
+           pouco menores, pra caber sem cortar nem forçar zoom. */
+        @media (max-width: 420px) {
+          .app-shell { padding: 20px 10px !important; }
+          .app-title { font-size: 21px !important; }
+          .flip-scene { height: 280px !important; }
+        }
+        @media (max-width: 340px) {
+          .app-shell { padding: 16px 8px !important; }
+          .flip-scene { height: 250px !important; }
+        }
       `}</style>
 
       <LevelMenu
@@ -273,33 +286,31 @@ function FlashcardCatalog() {
             className="plex"
             style={{ fontSize: 11, letterSpacing: "0.28em", color: "#9FE6BE", marginBottom: 6 }}
           >
-            {view === "home"
+            {view === "home" || view === "music"
               ? "FLASHCARDS ENGLISH"
               : (LEVELS.find((l) => l.id === level)?.label ?? "").toUpperCase()}
           </div>
           <h1
-            className="typewriter"
+            className="typewriter app-title"
             style={{ fontSize: 26, color: "#FFFFFF", margin: "0 0 12px", letterSpacing: "0.02em" }}
           >
-            {view === "home"
-              ? "Escolha um nível"
+            {view === "home" || view === "music"
+              ? "Choose a level"
               : view === "summary"
-              ? "Resumo de Progresso"
+              ? "Progress Summary"
               : view === "quiz"
               ? `Quiz · ${unitTitle}`
               : view === "phrases"
-              ? `Frases · ${unitTitle}`
-              : view === "music"
-              ? "Música"
+              ? `Phrases · ${unitTitle}`
               : `Unit ${unit} · ${unitTitle}`}
           </h1>
           {(view === "study" || view === "quiz" || view === "phrases" || view === "summary") && (
             <div style={{ display: "flex", justifyContent: "center", gap: 6, flexWrap: "wrap" }}>
               {[
-                { key: "study", label: "ESTUDAR" },
+                { key: "study", label: "STUDY" },
                 { key: "quiz", label: "QUIZ" },
-                { key: "phrases", label: "FRASES" },
-                { key: "summary", label: "RESUMO" },
+                { key: "phrases", label: "PHRASES" },
+                { key: "summary", label: "SUMMARY" },
               ].map((v) => (
                 <button
                   key={v.key}
@@ -324,45 +335,48 @@ function FlashcardCatalog() {
           )}
         </div>
 
-        {view === "home" ? (
-          <HomeScreen level={level} onSelectLevel={changeLevel} onSelectMusic={() => setView("music")} />
+        {view === "home" || view === "music" ? (
+          <HomeScreen
+            level={level}
+            onSelectLevel={changeLevel}
+            showMusic={view === "music"}
+            onToggleMusic={() => setView(view === "music" ? "home" : "music")}
+          />
         ) : view === "summary" ? (
           <SummaryScreen units={UNITS} cards={CARDS} status={status} onSelectUnit={openUnitFromSummary} onReset={resetProgress} />
         ) : (
           <>
             {/* Unit selector — drawer front labels */}
-            {view !== "music" && (
-              <div
-                className="unit-strip"
-                style={{ display: "flex", gap: 6, overflowX: "auto", paddingBottom: 8, marginBottom: 14 }}
-              >
-                {UNITS.map((u) => (
-                  <button
-                    key={u.id}
-                    onClick={() => changeUnit(u.id)}
-                    className="unit-btn plex"
-                    style={{
-                      flex: "0 0 auto",
-                      padding: "6px 10px",
-                      fontSize: 10.5,
-                      letterSpacing: "0.03em",
-                      borderRadius: 3,
-                      border: `1px solid ${unit === u.id ? "#D4AF37" : "#1F5C3B"}`,
-                      background: unit === u.id ? "#D4AF37" : "transparent",
-                      color: unit === u.id ? "#006437" : "#9FE6BE",
-                      cursor: "pointer",
-                      whiteSpace: "nowrap",
-                      fontWeight: unit === u.id ? 700 : 400,
-                    }}
-                  >
-                    {String(u.id).padStart(2, "0")} {u.title}
-                  </button>
-                ))}
-              </div>
-            )}
+            <div
+              className="unit-strip"
+              style={{ display: "flex", gap: 6, overflowX: "auto", paddingBottom: 8, marginBottom: 14 }}
+            >
+              {UNITS.map((u) => (
+                <button
+                  key={u.id}
+                  onClick={() => changeUnit(u.id)}
+                  className="unit-btn plex"
+                  style={{
+                    flex: "0 0 auto",
+                    padding: "6px 10px",
+                    fontSize: 10.5,
+                    letterSpacing: "0.03em",
+                    borderRadius: 3,
+                    border: `1px solid ${unit === u.id ? "#D4AF37" : "#1F5C3B"}`,
+                    background: unit === u.id ? "#D4AF37" : "transparent",
+                    color: unit === u.id ? "#006437" : "#9FE6BE",
+                    cursor: "pointer",
+                    whiteSpace: "nowrap",
+                    fontWeight: unit === u.id ? 700 : 400,
+                  }}
+                >
+                  {String(u.id).padStart(2, "0")} {u.title}
+                </button>
+              ))}
+            </div>
 
             {/* Category tabs */}
-            {view !== "phrases" && view !== "music" && (
+            {view !== "phrases" && (
               <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
                 {CATEGORIES.map((cat) => (
                   <button
@@ -386,12 +400,12 @@ function FlashcardCatalog() {
               </div>
             )}
 
-            {view !== "phrases" && view !== "music" && (
+            {view !== "phrases" && (
               <div style={{ display: "flex", justifyContent: "center", marginBottom: 18 }}>
                 <button
                   onClick={toggleReviewOnly}
                   className="tab-btn plex"
-                  title="Mostrar só as cartas marcadas para revisar"
+                  title="Show only the cards marked for review"
                   style={{
                     padding: "6px 14px",
                     fontSize: 11,
@@ -404,15 +418,13 @@ function FlashcardCatalog() {
                     cursor: "pointer",
                   }}
                 >
-                  {reviewOnly ? "★ SÓ REVISÃO" : "☆ SÓ REVISÃO"}
+                  {reviewOnly ? "★ REVIEW ONLY" : "☆ REVIEW ONLY"}
                 </button>
               </div>
             )}
 
             {view === "phrases" ? (
               <PhraseScreen sentences={PHRASES[unit] || []} />
-            ) : view === "music" ? (
-              <MusicScreen />
             ) : view === "quiz" ? (
               <QuizScreen deck={deck} allCards={CARDS} />
             ) : (
@@ -422,9 +434,9 @@ function FlashcardCatalog() {
               className="plex"
               style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "#BFEAD2", marginBottom: 10, padding: "0 4px" }}
             >
-              <span>CARTA {deck.length ? safeIndex + 1 : 0} / {deck.length}</span>
-              <span style={{ color: "#4ADE80" }}>SABIA: {known}</span>
-              <span style={{ color: "#D4AF37" }}>REVISAR: {review}</span>
+              <span>CARD {deck.length ? safeIndex + 1 : 0} / {deck.length}</span>
+              <span style={{ color: "#4ADE80" }}>KNOWN: {known}</span>
+              <span style={{ color: "#D4AF37" }}>REVIEW: {review}</span>
             </div>
 
             {/* Progress dots */}
@@ -452,7 +464,7 @@ function FlashcardCatalog() {
 
             {!card ? (
               <div style={{ textAlign: "center", padding: 40, color: "#BFEAD2", fontStyle: "italic" }}>
-                Nenhuma carta nesta categoria.
+                No cards in this category.
               </div>
             ) : (
               <>
@@ -463,7 +475,7 @@ function FlashcardCatalog() {
                   onClick={() => setFlipped((f) => !f)}
                   role="button"
                   tabIndex={0}
-                  aria-label={flipped ? "Carta virada, mostrando a resposta. Toque para ver o termo." : "Toque para virar e ver a resposta."}
+                  aria-label={flipped ? "Card flipped, showing the answer. Tap to see the term." : "Tap to flip and see the answer."}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === " ") {
                       e.preventDefault();
@@ -485,7 +497,7 @@ function FlashcardCatalog() {
                         cursor: "pointer",
                       }}
                     >
-                      {category === "Todos" && (
+                      {category === "All" && (
                         <div
                           className="plex"
                           style={{
@@ -507,10 +519,10 @@ function FlashcardCatalog() {
                         <div style={{ fontSize: card.front.length > 30 ? 20 : 26, color: "#006437", fontWeight: 700, lineHeight: 1.35 }}>
                           {card.front}
                         </div>
-                        {card.cat === "Vocabulário" && <SpeakButton text={card.front} />}
+                        {card.cat === "Vocabulary" && <SpeakButton text={card.front} />}
                       </div>
                       <div className="plex" style={{ textAlign: "center", fontSize: 10, color: "#6FA98A", letterSpacing: "0.1em" }}>
-                        TOQUE PARA VIRAR
+                        TAP TO FLIP
                       </div>
                     </div>
 
@@ -529,7 +541,7 @@ function FlashcardCatalog() {
                       }}
                     >
                       <div className="plex" style={{ fontSize: 10, color: catInk, letterSpacing: "0.08em", marginBottom: 10 }}>
-                        RESPOSTA
+                        ANSWER
                       </div>
                       <div style={{ fontSize: 19, color: "#006437", fontWeight: 700, marginBottom: 12, lineHeight: 1.4 }}>
                         {card.back}
@@ -573,7 +585,7 @@ function FlashcardCatalog() {
                       cursor: "pointer",
                     }}
                   >
-                    REVISAR DEPOIS
+                    REVIEW LATER
                   </button>
                   <button
                     onClick={() => mark("know")}
@@ -590,25 +602,25 @@ function FlashcardCatalog() {
                       cursor: "pointer",
                     }}
                   >
-                    JÁ SEI ✓
+                    I KNOW IT ✓
                   </button>
                 </div>
 
                 {/* Navigation */}
                 <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
                   <button onClick={() => goTo(safeIndex - 1)} className="cardbtn plex" style={navBtnStyle}>
-                    ← ANTERIOR
+                    ← PREVIOUS
                   </button>
                   <button
                     onClick={handleShuffle}
                     className="cardbtn plex"
                     style={{ ...navBtnStyle, flex: "0 0 auto", padding: "10px 14px" }}
-                    title="Embaralhar cartas desta unidade"
+                    title="Shuffle this unit's cards"
                   >
                     ⟲
                   </button>
                   <button onClick={() => goTo(safeIndex + 1)} className="cardbtn plex" style={navBtnStyle}>
-                    PRÓXIMA →
+                    NEXT →
                   </button>
                 </div>
               </>

@@ -5,8 +5,8 @@ function SpeakButton({ text, color = "#006437", size = 16 }) {
         e.stopPropagation();
         playPronunciation(text);
       }}
-      aria-label="Ouvir pronúncia"
-      title="Ouvir pronúncia"
+      aria-label="Listen to pronunciation"
+      title="Listen to pronunciation"
       style={{
         border: "none",
         background: "transparent",

@@ -24,7 +24,7 @@ function LevelMenu({ level, onSelectLevel, view, onSelectHome, onSelectMusic }) 
     <>
       <button
         onClick={() => setOpen(true)}
-        aria-label="Abrir menu de níveis"
+        aria-label="Open level menu"
         className="plex"
         style={{
           position: "fixed",
@@ -76,7 +76,7 @@ function LevelMenu({ level, onSelectLevel, view, onSelectHome, onSelectMusic }) 
           FLASHCARDS
         </div>
         <div style={{ fontSize: 10, letterSpacing: "0.1em", color: "#4C7A63", marginBottom: 20 }}>
-          {currentLabel.toUpperCase()} · ATIVO
+          {currentLabel.toUpperCase()} · ACTIVE
         </div>
 
         <button
@@ -96,11 +96,11 @@ function LevelMenu({ level, onSelectLevel, view, onSelectHome, onSelectMusic }) 
             cursor: "pointer",
           }}
         >
-          INÍCIO
+          HOME
         </button>
 
         <div style={{ fontSize: 10, letterSpacing: "0.12em", color: "#6FA98A", marginBottom: 10 }}>
-          NÍVEIS
+          LEVELS
         </div>
         {LEVELS.map((l) => (
           <button
@@ -127,7 +127,7 @@ function LevelMenu({ level, onSelectLevel, view, onSelectHome, onSelectMusic }) 
             <span>{l.label}</span>
             {!l.available && (
               <span style={{ fontSize: 8.5, letterSpacing: "0.05em", color: "#4C7A63" }}>
-                EM BREVE
+                COMING SOON
               </span>
             )}
           </button>
@@ -136,7 +136,7 @@ function LevelMenu({ level, onSelectLevel, view, onSelectHome, onSelectMusic }) 
         <div style={{ height: 1, background: "#1F5C3B", margin: "18px 0" }} />
 
         <div style={{ fontSize: 10, letterSpacing: "0.12em", color: "#6FA98A", marginBottom: 10 }}>
-          OUTROS
+          OTHER
         </div>
         <button
           onClick={pickMusic}
@@ -156,7 +156,7 @@ function LevelMenu({ level, onSelectLevel, view, onSelectHome, onSelectMusic }) 
             cursor: "pointer",
           }}
         >
-          MÚSICA
+          MUSIC
         </button>
       </div>
     </>

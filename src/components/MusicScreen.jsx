@@ -47,7 +47,7 @@ function MusicScreen() {
       </div>
 
       <div className="plex" style={{ fontSize: 10.5, color: "#6FA98A", textAlign: "center", lineHeight: 1.5 }}>
-        A legenda vem direto do YouTube — o app não guarda nem mostra letras de música.
+        Captions come straight from YouTube — the app doesn't store or show song lyrics.
       </div>
     </div>
   );

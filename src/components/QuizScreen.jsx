@@ -44,7 +44,7 @@ function QuizScreen({ deck, allCards }) {
   if (quizItems.length === 0) {
     return (
       <div style={{ textAlign: "center", padding: 40, color: "#BFEAD2", fontStyle: "italic" }}>
-        Nenhuma carta nesta categoria.
+        No cards in this category.
       </div>
     );
   }
@@ -63,11 +63,11 @@ function QuizScreen({ deck, allCards }) {
         }}
       >
         <div className="plex" style={{ fontSize: 11, color: "#3F7A5C", letterSpacing: "0.08em", marginBottom: 8 }}>
-          QUIZ CONCLUÍDO
+          QUIZ COMPLETE
         </div>
         <div style={{ fontSize: 36, color: "#006437", fontWeight: 700, marginBottom: 6 }}>{pct}%</div>
         <div className="plex" style={{ fontSize: 12, color: "#3F7A5C", marginBottom: 20 }}>
-          {score} de {quizItems.length} corretas
+          {score} of {quizItems.length} correct
         </div>
         <button
           onClick={() => setSeed((s) => s + 1)}
@@ -83,7 +83,7 @@ function QuizScreen({ deck, allCards }) {
             cursor: "pointer",
           }}
         >
-          REFAZER QUIZ ⟲
+          RETRY QUIZ ⟲
         </button>
       </div>
     );
@@ -113,8 +113,8 @@ function QuizScreen({ deck, allCards }) {
         className="plex"
         style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "#BFEAD2", marginBottom: 10, padding: "0 4px" }}
       >
-        <span>PERGUNTA {qIndex + 1} / {quizItems.length}</span>
-        <span style={{ color: "#4ADE80" }}>ACERTOS: {score}</span>
+        <span>QUESTION {qIndex + 1} / {quizItems.length}</span>
+        <span style={{ color: "#4ADE80" }}>CORRECT: {score}</span>
       </div>
 
       <div
@@ -141,7 +141,7 @@ function QuizScreen({ deck, allCards }) {
         <div style={{ fontSize: 20, color: "#006437", fontWeight: 700, lineHeight: 1.4, textAlign: "center" }}>
           {item.card.front}
         </div>
-        {item.card.cat === "Vocabulário" && (
+        {item.card.cat === "Vocabulary" && (
           <div style={{ textAlign: "center", marginTop: 6 }}>
             <SpeakButton text={item.card.front} />
           </div>
@@ -230,7 +230,7 @@ function QuizScreen({ deck, allCards }) {
           cursor: selected ? "pointer" : "default",
         }}
       >
-        {isLast ? "VER RESULTADO" : "PRÓXIMA →"}
+        {isLast ? "SEE RESULT" : "NEXT →"}
       </button>
     </div>
   );
