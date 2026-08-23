@@ -38,11 +38,15 @@
     console.error(message);
   }
 
-  // Arquivos do app, carregados nesta ordem — cada um vira um <script>
-  // "clássico" avaliado no escopo global, então const/function do topo de
-  // um arquivo continuam visíveis nos arquivos seguintes (é assim que
-  // scripts sem type="module" sempre funcionaram; sem isso não daria pra
-  // dividir o app em vários arquivos sem um bundler).
+  // Arquivos do app, carregados nesta ordem. Cada um é buscado e compilado
+  // (Babel) separadamente, mas todos são executados juntos, num único
+  // eval() no final — de propósito: um const/function no topo de um
+  // arquivo só continua "visível" pros arquivos seguintes se todos rodarem
+  // dentro do MESMO eval(). Chamar eval() uma vez por arquivo parece que
+  // devia funcionar (é assim que tags <script> separadas se comportam),
+  // mas eval() não segue essa regra: cada chamada de eval() ganha seu
+  // próprio escopo para let/const, descartado assim que ela termina — por
+  // isso juntamos tudo antes de rodar.
   //
   // A ordem importa: um arquivo só pode usar o que os arquivos ANTES dele
   // já declararam. Pra adicionar um nível novo, veja o comentário em
@@ -78,6 +82,7 @@
   }
 
   async function loadAll() {
+    var combined = "";
     for (var i = 0; i < FILES.length; i++) {
       var file = FILES[i];
       var res = await fetch(file + "?v=" + Date.now());
@@ -94,10 +99,12 @@
         presets: [["react", { runtime: "classic" }]]
       }).code;
 
-      // Executa em escopo global — cada arquivo soma suas declarações às
-      // dos arquivos já carregados antes dele.
-      (0, eval)(compiled);
+      combined += "\n// ---- " + file + " ----\n" + compiled + "\n";
     }
+
+    // Um único eval(), com todos os arquivos já concatenados na ordem
+    // certa — veja o comentário acima de FILES sobre por quê.
+    (0, eval)(combined);
   }
 
   loadAll()
