@@ -9,30 +9,50 @@ function MusicScreen({ songs }) {
     );
   }
 
-  const song = songs[Math.min(selected, songs.length - 1)];
+  const safeSelected = Math.min(selected, songs.length - 1);
+  const song = songs[safeSelected];
 
   return (
     <div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
+      {/* Caixa de seleção compacta em vez de uma lista longa de cartões —
+          ocupa uma linha só; nota e artista aparecem embaixo, pra música
+          escolhida, depois de selecionar. */}
+      <select
+        value={safeSelected}
+        onChange={(e) => setSelected(Number(e.target.value))}
+        className="plex"
+        style={{
+          display: "block",
+          width: "100%",
+          padding: "12px 14px",
+          marginBottom: 14,
+          fontSize: 14,
+          borderRadius: 6,
+          border: "1px solid #BFE3CC",
+          background: "#F4FBF6",
+          color: "#006437",
+          cursor: "pointer",
+        }}
+      >
         {songs.map((s, i) => (
-          <button
-            key={s.videoId}
-            onClick={() => setSelected(i)}
-            className="cardbtn"
-            style={{
-              textAlign: "left",
-              padding: "10px 14px",
-              borderRadius: 5,
-              cursor: "pointer",
-              background: i === selected ? "#FFFFFF" : "#F4FBF6",
-              border: `1px solid ${i === selected ? "#006437" : "#BFE3CC"}`,
-            }}
-          >
-            <div style={{ fontWeight: 700, color: "#006437", fontSize: 14 }}>{s.title}</div>
-            <div className="plex" style={{ fontSize: 11, color: "#3F7A5C", marginTop: 2 }}>{s.artist}</div>
-            <div style={{ fontSize: 12, color: "#1F4A34", marginTop: 4 }}>{s.note}</div>
-          </button>
+          <option key={s.videoId} value={i}>
+            {s.title} — {s.artist}
+          </option>
         ))}
+      </select>
+
+      <div
+        style={{
+          ...notebookBg("#EAF6EF"),
+          border: "1px solid #BFE3CC",
+          borderRadius: 6,
+          padding: "10px 14px",
+          marginBottom: 14,
+          fontSize: 12,
+          color: "#1F4A34",
+        }}
+      >
+        {song.note}
       </div>
 
       <div
