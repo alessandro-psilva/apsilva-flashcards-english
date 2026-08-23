@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Flashcards — Outcomes Pre-Intermediate</title>
+<title>Flashcards English</title>
 <style>
   html, body { margin: 0; padding: 0; background: #006437; }
   #error-box {
@@ -14,6 +14,7 @@
     max-width: 560px;
     margin: 0 auto;
     line-height: 1.5;
+    white-space: pre-wrap;
   }
 </style>
 
@@ -21,7 +22,7 @@
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 
-<!-- Babel: converte o JSX do arquivo do app para JS puro, direto no navegador -->
+<!-- Babel: converte o JSX dos arquivos do app para JS puro, direto no navegador -->
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body>
@@ -37,35 +38,73 @@
     console.error(message);
   }
 
-  fetch("flashcards-english.jsx?v=" + Date.now())
-    .then(function (res) {
-      if (!res.ok) throw new Error("Arquivo flashcards-english.jsx não encontrado (status " + res.status + ").");
-      return res.text();
-    })
-    .then(function (code) {
-      // O arquivo usa "import"/"export default", que é sintaxe de módulo ES.
-      // Aqui removemos isso para rodar como um script comum no navegador,
-      // usando os hooks do objeto global React (carregado via CDN acima).
-      var cleaned = code
-        .replace(/^\s*import\s+(?:(?:React\s*,\s*)?\{([^}]+)\}|React|\*\s+as\s+React)\s+from\s*["']react["'];?\s*$/gm, function (_, namedImports) {
-          return namedImports ? "const {" + namedImports + "} = React;" : "";
-        })
-        .replace(/export\s+default\s+/g, "");
+  // Arquivos do app, carregados nesta ordem — cada um vira um <script>
+  // "clássico" avaliado no escopo global, então const/function do topo de
+  // um arquivo continuam visíveis nos arquivos seguintes (é assim que
+  // scripts sem type="module" sempre funcionaram; sem isso não daria pra
+  // dividir o app em vários arquivos sem um bundler).
+  //
+  // A ordem importa: um arquivo só pode usar o que os arquivos ANTES dele
+  // já declararam. Pra adicionar um nível novo, veja o comentário em
+  // src/data/levels/index.js — o resumo é: crie src/data/levels/<nivel>.js
+  // e liste-o aqui, logo antes de "src/data/levels/index.js".
+  var FILES = [
+    "src/bootstrap.js",
+    "src/data/categories.js",
+    "src/data/music.js",
+    "src/data/levels/pre-intermediate.js",
+    "src/data/levels/index.js",
+    "src/utils/helpers.js",
+    "src/utils/audio.js",
+    "src/components/SpeakButton.jsx",
+    "src/components/MusicScreen.jsx",
+    "src/components/PhraseScreen.jsx",
+    "src/components/SummaryScreen.jsx",
+    "src/components/QuizScreen.jsx",
+    "src/components/LevelMenu.jsx",
+    "src/app.jsx"
+  ];
 
+  function stripModuleSyntax(code) {
+    // Os arquivos não usam import/export de verdade como mecanismo de
+    // compartilhamento (isso é feito via escopo global, acima) — mas caso
+    // algum arquivo tenha um import de "react" só por costume, removemos
+    // aqui pra não quebrar o Babel.
+    return code
+      .replace(/^\s*import\s+(?:(?:React\s*,\s*)?\{([^}]+)\}|React|\*\s+as\s+React)\s+from\s*["']react["'];?\s*$/gm, function (_, namedImports) {
+        return namedImports ? "const {" + namedImports + "} = React;" : "";
+      })
+      .replace(/export\s+default\s+/g, "");
+  }
+
+  async function loadAll() {
+    for (var i = 0; i < FILES.length; i++) {
+      var file = FILES[i];
+      var res = await fetch(file + "?v=" + Date.now());
+      if (!res.ok) {
+        throw new Error("Arquivo " + file + " não encontrado (status " + res.status + ").");
+      }
+      var code = await res.text();
+      var cleaned = stripModuleSyntax(code);
       if (/^\s*(?:import|export)\b/m.test(cleaned)) {
-        throw new Error("O arquivo usa import/export não suportado pelo carregador do app.");
+        throw new Error("O arquivo " + file + " usa import/export não suportado pelo carregador do app.");
       }
       var compiled = Babel.transform(cleaned, {
+        filename: file,
         presets: [["react", { runtime: "classic" }]]
       }).code;
 
-      // Executa em escopo global, o que deixa FlashcardCatalog disponível a seguir
+      // Executa em escopo global — cada arquivo soma suas declarações às
+      // dos arquivos já carregados antes dele.
       (0, eval)(compiled);
+    }
+  }
 
+  loadAll()
+    .then(function () {
       if (typeof FlashcardCatalog === "undefined") {
-        throw new Error("O componente FlashcardCatalog não foi encontrado no arquivo.");
+        throw new Error("O componente FlashcardCatalog não foi encontrado (verifique src/app.jsx).");
       }
-
       var root = ReactDOM.createRoot(document.getElementById("root"));
       root.render(React.createElement(FlashcardCatalog));
     })
