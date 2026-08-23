@@ -1,9 +1,14 @@
 // Menu lateral do app: troca de nível (Beginner…Advanced) e acesso à seção
 // de Música, que é a mesma para qualquer nível — por isso mora aqui no
 // menu principal, e não dentro dos dados de um nível específico.
-function LevelMenu({ level, onSelectLevel, view, onSelectMusic }) {
+function LevelMenu({ level, onSelectLevel, view, onSelectHome, onSelectMusic }) {
   const [open, setOpen] = useState(false);
   const currentLabel = LEVELS.find((l) => l.id === level)?.label ?? "";
+
+  function pickHome() {
+    onSelectHome();
+    setOpen(false);
+  }
 
   function pickLevel(id) {
     onSelectLevel(id);
@@ -70,9 +75,29 @@ function LevelMenu({ level, onSelectLevel, view, onSelectMusic }) {
         <div style={{ fontSize: 11, letterSpacing: "0.28em", color: "#9FE6BE", marginBottom: 4 }}>
           FLASHCARDS
         </div>
-        <div style={{ fontSize: 10, letterSpacing: "0.1em", color: "#4C7A63", marginBottom: 22 }}>
+        <div style={{ fontSize: 10, letterSpacing: "0.1em", color: "#4C7A63", marginBottom: 20 }}>
           {currentLabel.toUpperCase()} · ATIVO
         </div>
+
+        <button
+          onClick={pickHome}
+          style={{
+            display: "block",
+            width: "100%",
+            textAlign: "left",
+            padding: "10px 12px",
+            marginBottom: 18,
+            fontSize: 12,
+            borderRadius: 3,
+            border: `1px solid ${view === "home" ? "#D4AF37" : "#1F5C3B"}`,
+            background: view === "home" ? "#D4AF37" : "transparent",
+            color: view === "home" ? "#053B22" : "#CFEFDC",
+            fontWeight: view === "home" ? 700 : 400,
+            cursor: "pointer",
+          }}
+        >
+          INÍCIO
+        </button>
 
         <div style={{ fontSize: 10, letterSpacing: "0.12em", color: "#6FA98A", marginBottom: 10 }}>
           NÍVEIS
@@ -131,7 +156,7 @@ function LevelMenu({ level, onSelectLevel, view, onSelectMusic }) {
             cursor: "pointer",
           }}
         >
-          🎵 MÚSICA
+          MÚSICA
         </button>
       </div>
     </>

@@ -46,26 +46,7 @@ function MusicScreen() {
         />
       </div>
 
-      <div
-        style={{
-          ...notebookBg("#EAF6EF"),
-          border: "1px solid #BFE3CC",
-          borderRadius: 6,
-          padding: "14px 16px",
-        }}
-      >
-        <div className="plex" style={{ fontSize: 10, color: "#3F7A5C", letterSpacing: "0.08em", marginBottom: 8 }}>
-          COMO VER A LETRA COM TRADUÇÃO
-        </div>
-        <div style={{ fontSize: 13, color: "#1F4A34", lineHeight: 1.6 }}>
-          1. Toque no ícone <strong>CC</strong> (legenda) na barra do vídeo.
-          <br />
-          2. Toque na engrenagem ⚙️ → <strong>Legendas</strong> → <strong>Traduzir automaticamente</strong> → escolha <strong>Português</strong>.
-          <br />
-          3. Toque de novo em ⚙️ → Legendas → English, se quiser ler no idioma original.
-        </div>
-      </div>
-      <div className="plex" style={{ fontSize: 10.5, color: "#6FA98A", marginTop: 10, textAlign: "center", lineHeight: 1.5 }}>
+      <div className="plex" style={{ fontSize: 10.5, color: "#6FA98A", textAlign: "center", lineHeight: 1.5 }}>
         A legenda vem direto do YouTube — o app não guarda nem mostra letras de música.
       </div>
     </div>

@@ -4,7 +4,7 @@
 
 function FlashcardCatalog() {
   const [level, setLevel] = useState(DEFAULT_LEVEL);
-  const [view, setView] = useState("study"); // 'study' | 'quiz' | 'phrases' | 'music' | 'summary'
+  const [view, setView] = useState("home"); // 'home' | 'study' | 'quiz' | 'phrases' | 'music' | 'summary'
   const [unit, setUnit] = useState(1);
   const [category, setCategory] = useState("Todos");
   const [reviewOnly, setReviewOnly] = useState(false);
@@ -187,11 +187,16 @@ function FlashcardCatalog() {
   }
 
   // Troca de nível: reseta unidade/categoria/embaralho pro novo nível e
-  // fecha o menu. Ignora cliques em níveis ainda sem conteúdo ("em breve")
-  // e em cliques repetidos no nível já ativo.
+  // manda pra tela de estudo. Ignora cliques em níveis ainda sem conteúdo
+  // ("em breve"). Clicar no nível que já está ativo (por exemplo, voltando
+  // da Música ou do Resumo) não reseta nada — só volta pra tela de estudo.
   function changeLevel(id) {
     const target = LEVELS.find((l) => l.id === id);
-    if (!target || !target.available || id === level) return;
+    if (!target || !target.available) return;
+    if (id === level) {
+      setView("study");
+      return;
+    }
     const data = getLevelData(id);
     setLevel(id);
     setOrder(data.cards.map((c) => c.id));
@@ -257,6 +262,7 @@ function FlashcardCatalog() {
         level={level}
         onSelectLevel={changeLevel}
         view={view}
+        onSelectHome={() => setView("home")}
         onSelectMusic={() => setView("music")}
       />
 
@@ -267,13 +273,17 @@ function FlashcardCatalog() {
             className="plex"
             style={{ fontSize: 11, letterSpacing: "0.28em", color: "#9FE6BE", marginBottom: 6 }}
           >
-            {(LEVELS.find((l) => l.id === level)?.label ?? "").toUpperCase()}
+            {view === "home"
+              ? "FLASHCARDS ENGLISH"
+              : (LEVELS.find((l) => l.id === level)?.label ?? "").toUpperCase()}
           </div>
           <h1
             className="typewriter"
             style={{ fontSize: 26, color: "#FFFFFF", margin: "0 0 12px", letterSpacing: "0.02em" }}
           >
-            {view === "summary"
+            {view === "home"
+              ? "Escolha um nível"
+              : view === "summary"
               ? "Resumo de Progresso"
               : view === "quiz"
               ? `Quiz · ${unitTitle}`
@@ -283,36 +293,40 @@ function FlashcardCatalog() {
               ? "Música"
               : `Unit ${unit} · ${unitTitle}`}
           </h1>
-          <div style={{ display: "flex", justifyContent: "center", gap: 6, flexWrap: "wrap" }}>
-            {[
-              { key: "study", label: "ESTUDAR" },
-              { key: "quiz", label: "QUIZ" },
-              { key: "phrases", label: "FRASES" },
-              { key: "summary", label: "RESUMO" },
-            ].map((v) => (
-              <button
-                key={v.key}
-                onClick={() => setView(v.key)}
-                className="plex"
-                style={{
-                  padding: "5px 12px",
-                  fontSize: 10,
-                  letterSpacing: "0.04em",
-                  borderRadius: 3,
-                  border: `1px solid ${view === v.key ? "#FFFFFF" : "#2E7D52"}`,
-                  background: view === v.key ? "#FFFFFF" : "transparent",
-                  color: view === v.key ? "#006437" : "#9FE6BE",
-                  fontWeight: view === v.key ? 700 : 400,
-                  cursor: "pointer",
-                }}
-              >
-                {v.label}
-              </button>
-            ))}
-          </div>
+          {(view === "study" || view === "quiz" || view === "phrases" || view === "summary") && (
+            <div style={{ display: "flex", justifyContent: "center", gap: 6, flexWrap: "wrap" }}>
+              {[
+                { key: "study", label: "ESTUDAR" },
+                { key: "quiz", label: "QUIZ" },
+                { key: "phrases", label: "FRASES" },
+                { key: "summary", label: "RESUMO" },
+              ].map((v) => (
+                <button
+                  key={v.key}
+                  onClick={() => setView(v.key)}
+                  className="plex"
+                  style={{
+                    padding: "5px 12px",
+                    fontSize: 10,
+                    letterSpacing: "0.04em",
+                    borderRadius: 3,
+                    border: `1px solid ${view === v.key ? "#FFFFFF" : "#2E7D52"}`,
+                    background: view === v.key ? "#FFFFFF" : "transparent",
+                    color: view === v.key ? "#006437" : "#9FE6BE",
+                    fontWeight: view === v.key ? 700 : 400,
+                    cursor: "pointer",
+                  }}
+                >
+                  {v.label}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
-        {view === "summary" ? (
+        {view === "home" ? (
+          <HomeScreen level={level} onSelectLevel={changeLevel} onSelectMusic={() => setView("music")} />
+        ) : view === "summary" ? (
           <SummaryScreen units={UNITS} cards={CARDS} status={status} onSelectUnit={openUnitFromSummary} onReset={resetProgress} />
         ) : (
           <>
