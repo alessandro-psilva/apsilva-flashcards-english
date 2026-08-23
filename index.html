@@ -34,6 +34,15 @@
 
 <!-- Babel: converte o JSX dos arquivos do app para JS puro, direto no navegador -->
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<!-- Firebase (opcional): login com Google + Firestore, pra sincronizar o
+     progresso entre aparelhos. Se src/firebaseConfig.js não estiver
+     preenchido, esses scripts carregam mas ficam sem uso — o app continua
+     funcionando 100% com localStorage. Veja src/firebaseConfig.js pra
+     configurar. -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
@@ -65,11 +74,14 @@
   var FILES = [
     "src/bootstrap.js",
     "src/data/categories.js",
+    "src/firebaseConfig.js",
+    "src/utils/cloud.js",
     "src/data/levels/pre-intermediate.js",
     "src/data/levels/index.js",
     "src/utils/helpers.js",
     "src/utils/audio.js",
     "src/components/SpeakButton.jsx",
+    "src/components/AccountSection.jsx",
     "src/components/HomeScreen.jsx",
     "src/components/MusicScreen.jsx",
     "src/components/PhraseScreen.jsx",

@@ -159,6 +159,8 @@ function LevelMenu({ level, onSelectLevel, view, onSelectHome, onSelectMusic }) 
         >
           MUSIC
         </button>
+
+        <AccountSection />
       </div>
     </>
   );

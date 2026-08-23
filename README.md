@@ -11,7 +11,8 @@ App de estudo de inglês com flashcards, quiz, frases pra praticar falando sobre
 - **Quiz** — perguntas de múltipla escolha geradas a partir das cartas da unidade selecionada, com placar final.
 - **Frases** — frases por unidade para praticar falando sobre a própria vida, usando os mesmos termos das flashcards.
 - **Música** — vídeos oficiais do YouTube com dicção clara, pra praticar listening com legenda traduzida. O atalho fica no menu principal/lateral (não numa aba de estudo), mas a lista de músicas é específica do nível selecionado — cada nível cura suas próprias recomendações.
-- **Progresso salvo** — marque "já sei" / "revisar depois" em cada carta; o progresso fica salvo automaticamente por nível (localStorage no navegador quando hospedado fora do Claude), então trocar de nível não mistura o progresso de um com o outro.
+- **Progresso salvo** — marque "já sei" / "revisar depois" em cada carta; o progresso fica salvo automaticamente por nível, então trocar de nível não mistura o progresso de um com o outro. Por padrão fica só no navegador local (localStorage); com login habilitado (veja "Sincronizar entre aparelhos" abaixo), sincroniza na nuvem.
+- **Login com Google (opcional)** — cada pessoa loga com a própria conta Google, pelo menu lateral, e o progresso passa a sincronizar entre todos os aparelhos dela automaticamente. É multiusuário de verdade: cada conta só vê o próprio progresso. Precisa de configuração (veja abaixo); sem configurar, o app funciona normalmente do jeito de sempre.
 - **Resumo** — visão geral do progresso por unidade do nível atual, com opção de resetar tudo.
 
 ## Conteúdo (Pre-Intermediate)
@@ -33,6 +34,7 @@ apsilva-flashcards-english/
 ├── src/
 │   ├── bootstrap.js                  # destructuring dos hooks do React (useState, useMemo, useEffect)
 │   ├── app.jsx                       # componente principal: cabeçalho, menu de níveis, roteamento de telas
+│   ├── firebaseConfig.js             # chaves do Firebase p/ login+sync na nuvem (opcional, veja abaixo)
 │   ├── data/
 │   │   ├── categories.js             # categorias de carta (Vocabulary/Grammar), compartilhadas entre níveis
 │   │   └── levels/
@@ -40,10 +42,12 @@ apsilva-flashcards-english/
 │   │       └── pre-intermediate.js   # unidades, cartas, frases e músicas do nível Pre-Intermediate
 │   ├── utils/
 │   │   ├── helpers.js                # shuffle, textura de "papel pautado"
-│   │   └── audio.js                  # pronúncia (áudio real via API + voz sintética como fallback)
+│   │   ├── audio.js                  # pronúncia (áudio real via API + voz sintética como fallback)
+│   │   └── cloud.js                  # login com Google + sincronização de progresso (Firebase, opcional)
 │   └── components/
 │       ├── SpeakButton.jsx
-│       ├── LevelMenu.jsx             # menu lateral (níveis + música)
+│       ├── AccountSection.jsx        # login/logout com Google, dentro do menu lateral
+│       ├── LevelMenu.jsx             # menu lateral (níveis + música + conta)
 │       ├── SummaryScreen.jsx
 │       ├── PhraseScreen.jsx
 │       ├── MusicScreen.jsx
@@ -60,6 +64,16 @@ apsilva-flashcards-english/
 5. (Opcional) Coloque o PDF do livro em `docs/` — já fica fora do git automaticamente (veja `.gitignore`).
 
 O nível aparece no menu lateral assim que `available` vira `true`.
+
+## Sincronizar progresso entre aparelhos (login com Google)
+
+Por padrão o progresso fica só no navegador (localStorage). Pra sincronizar entre celular/notebook/etc., cada pessoa pode logar com a própria conta Google — mas isso precisa de um projeto Firebase (gratuito) configurado uma vez:
+
+1. Siga o passo a passo completo nos comentários de `src/firebaseConfig.js` (criar o projeto, ativar login Google, criar o Firestore, colar as regras de segurança, pegar as chaves, autorizar o domínio do GitHub Pages).
+2. Cole as chaves no lugar dos `REPLACE_WITH_...` em `src/firebaseConfig.js`.
+3. Suba o arquivo (`git push`).
+
+Enquanto `src/firebaseConfig.js` estiver com os valores de exemplo, a seção de conta nem aparece no menu — o app roda exatamente como sempre rodou, com localStorage. Depois de configurado, é multiusuário: cada pessoa loga com a própria conta e só vê o próprio progresso (as regras do Firestore garantem isso). Se alguém já tinha progresso salvo localmente antes de logar pela primeira vez, ele é copiado pra nuvem automaticamente no primeiro login, sem perder nada.
 
 ## Como rodar localmente
 
