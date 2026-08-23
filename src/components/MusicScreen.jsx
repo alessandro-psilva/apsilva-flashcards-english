@@ -1,11 +1,20 @@
-function MusicScreen() {
+function MusicScreen({ songs }) {
   const [selected, setSelected] = useState(0);
-  const song = MUSIC_RECOMMENDATIONS[selected];
+
+  if (!songs || songs.length === 0) {
+    return (
+      <div style={{ textAlign: "center", padding: 40, color: "#BFEAD2", fontStyle: "italic" }}>
+        No songs yet for this level.
+      </div>
+    );
+  }
+
+  const song = songs[Math.min(selected, songs.length - 1)];
 
   return (
     <div>
       <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
-        {MUSIC_RECOMMENDATIONS.map((s, i) => (
+        {songs.map((s, i) => (
           <button
             key={s.videoId}
             onClick={() => setSelected(i)}

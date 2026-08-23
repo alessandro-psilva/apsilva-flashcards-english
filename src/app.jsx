@@ -15,7 +15,7 @@ function FlashcardCatalog() {
   const [loaded, setLoaded] = useState(false);
 
   // Dados do nível atual — trocar de nível troca UNITS/CARDS/PHRASES juntos.
-  const { units: UNITS, cards: CARDS, phrases: PHRASES } = useMemo(
+  const { units: UNITS, cards: CARDS, phrases: PHRASES, music: MUSIC } = useMemo(
     () => getLevelData(level),
     [level]
   );
@@ -341,6 +341,7 @@ function FlashcardCatalog() {
             onSelectLevel={changeLevel}
             showMusic={view === "music"}
             onToggleMusic={() => setView(view === "music" ? "home" : "music")}
+            songs={MUSIC}
           />
         ) : view === "summary" ? (
           <SummaryScreen units={UNITS} cards={CARDS} status={status} onSelectUnit={openUnitFromSummary} onReset={resetProgress} />

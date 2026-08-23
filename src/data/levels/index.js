@@ -3,8 +3,10 @@
 // "COMING SOON" e não podem ser abertos ainda.
 //
 // Para adicionar um nível novo:
-//   1. Crie src/data/levels/<nivel>.js com as unidades/cartas/frases desse
-//      nível, no mesmo formato de pre-intermediate.js (troque o prefixo).
+//   1. Crie src/data/levels/<nivel>.js com as unidades/cartas/frases/músicas
+//      desse nível, no mesmo formato de pre-intermediate.js (troque o
+//      prefixo). A música também é por nível — cada nível cura sua própria
+//      lista de músicas, do jeito apropriado pra esse estágio.
 //   2. Liste esse arquivo em FILES, dentro do index.html, logo depois deste
 //      arquivo (src/data/levels/index.js já precisa ter carregado antes,
 //      então na prática o arquivo do nível entra ANTES deste no manifesto —
@@ -27,10 +29,11 @@ const LEVEL_DATA = {
     units: PRE_INTERMEDIATE_UNITS,
     cards: PRE_INTERMEDIATE_CARDS,
     phrases: PRE_INTERMEDIATE_PHRASES,
+    music: PRE_INTERMEDIATE_MUSIC,
   },
 };
 
-const EMPTY_LEVEL_DATA = { units: [], cards: [], phrases: {} };
+const EMPTY_LEVEL_DATA = { units: [], cards: [], phrases: {}, music: [] };
 
 function getLevelData(levelId) {
   return LEVEL_DATA[levelId] ?? EMPTY_LEVEL_DATA;

@@ -1,6 +1,7 @@
 // Menu lateral do app: troca de nível (Beginner…Advanced) e acesso à seção
-// de Música, que é a mesma para qualquer nível — por isso mora aqui no
-// menu principal, e não dentro dos dados de um nível específico.
+// de Música (que mostra as músicas do nível atualmente selecionado) — por
+// isso o atalho mora aqui no menu principal, e não dentro das abas de
+// estudo de um nível específico.
 function LevelMenu({ level, onSelectLevel, view, onSelectHome, onSelectMusic }) {
   const [open, setOpen] = useState(false);
   const currentLabel = LEVELS.find((l) => l.id === level)?.label ?? "";

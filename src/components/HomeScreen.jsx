@@ -1,7 +1,9 @@
-// Página inicial: grid de níveis (Beginner…Advanced) + Música, que vale pra
-// qualquer nível e por isso mora aqui embaixo do grid (não numa tela à
-// parte) em vez de dentro de um nível específico. É a tela que abre quando
-// o app carrega, e pra onde "HOME" no menu lateral traz de volta.
+// Página inicial: grid de níveis (Beginner…Advanced) + Música do nível
+// atualmente selecionado. Música mora aqui (acessível pelo menu principal),
+// não dentro das abas de estudo de um nível — mas a lista de músicas em si
+// é por nível (cada nível cura suas próprias músicas). Clicar em MUSIC troca
+// o grid pela lista, em vez de empilhar os dois. É a tela que abre quando o
+// app carrega, e pra onde "HOME" no menu lateral traz de volta.
 // Simple inline decorative graphic for the home page — a stack of index
 // cards, drawn as SVG so it stays self-contained (no image file to host or
 // keep track of) and matches the app's notebook/green-and-gold look.
@@ -27,15 +29,7 @@ function HomeArt() {
   );
 }
 
-function HomeScreen({ level, onSelectLevel, showMusic, onToggleMusic }) {
-  const musicRef = useRef(null);
-
-  useEffect(() => {
-    if (showMusic && musicRef.current) {
-      musicRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  }, [showMusic]);
-
+function HomeScreen({ level, onSelectLevel, showMusic, onToggleMusic, songs }) {
   return (
     <div>
       <HomeArt />
@@ -47,41 +41,47 @@ function HomeScreen({ level, onSelectLevel, showMusic, onToggleMusic }) {
         Flashcards, quizzes, and phrases to practice English.
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 20 }}>
-        {LEVELS.map((l) => (
-          <button
-            key={l.id}
-            onClick={() => onSelectLevel(l.id)}
-            disabled={!l.available}
-            className={l.available ? "cardbtn" : undefined}
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              textAlign: "left",
-              padding: "16px 18px",
-              borderRadius: 6,
-              border: `1px solid ${level === l.id && l.available ? "#D4AF37" : l.available ? "#BFE3CC" : "#1F5C3B"}`,
-              background: l.available ? "#F4FBF6" : "transparent",
-              boxShadow: l.available ? "0 6px 18px rgba(6,40,25,0.28), 0 1px 0 #fff inset" : "none",
-              cursor: l.available ? "pointer" : "not-allowed",
-            }}
-          >
-            <span
+      {/* Toggle entre grid de níveis e lista de música — os dois nunca
+          ficam visíveis ao mesmo tempo, pra não virar uma página gigante
+          de scroll. Clicar em MUSIC troca o conteúdo aqui embaixo, não
+          empilha um embaixo do outro. */}
+      {!showMusic && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 20 }}>
+          {LEVELS.map((l) => (
+            <button
+              key={l.id}
+              onClick={() => onSelectLevel(l.id)}
+              disabled={!l.available}
+              className={l.available ? "cardbtn" : undefined}
               style={{
-                fontSize: 16,
-                fontWeight: 700,
-                color: l.available ? "#006437" : "#4C7A63",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                textAlign: "left",
+                padding: "16px 18px",
+                borderRadius: 6,
+                border: `1px solid ${level === l.id && l.available ? "#D4AF37" : l.available ? "#BFE3CC" : "#1F5C3B"}`,
+                background: l.available ? "#F4FBF6" : "transparent",
+                boxShadow: l.available ? "0 6px 18px rgba(6,40,25,0.28), 0 1px 0 #fff inset" : "none",
+                cursor: l.available ? "pointer" : "not-allowed",
               }}
             >
-              {l.label}
-            </span>
-            <span className="plex" style={{ fontSize: 10, letterSpacing: "0.05em", color: l.available ? "#3F7A5C" : "#4C7A63" }}>
-              {l.available ? "OPEN" : "COMING SOON"}
-            </span>
-          </button>
-        ))}
-      </div>
+              <span
+                style={{
+                  fontSize: 16,
+                  fontWeight: 700,
+                  color: l.available ? "#006437" : "#4C7A63",
+                }}
+              >
+                {l.label}
+              </span>
+              <span className="plex" style={{ fontSize: 10, letterSpacing: "0.05em", color: l.available ? "#3F7A5C" : "#4C7A63" }}>
+                {l.available ? "OPEN" : "COMING SOON"}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
 
       <button
         onClick={onToggleMusic}
@@ -101,12 +101,12 @@ function HomeScreen({ level, onSelectLevel, showMusic, onToggleMusic }) {
           cursor: "pointer",
         }}
       >
-        {showMusic ? "MUSIC ▲" : "MUSIC — PRACTICE LISTENING ▾"}
+        {showMusic ? "← BACK TO LEVELS" : "MUSIC — PRACTICE LISTENING ▾"}
       </button>
 
       {showMusic && (
-        <div ref={musicRef} style={{ marginTop: 18, scrollMarginTop: 20 }}>
-          <MusicScreen />
+        <div style={{ marginTop: 18 }}>
+          <MusicScreen songs={songs} />
         </div>
       )}
     </div>
