@@ -1,0 +1,14 @@
+{
+  "name": "apsilva-flashcards-english",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Validation harness dependencies for the flashcards app. The app itself needs no build/install — this package.json exists only so `node validate.js` (run locally or in CI) can render every screen with real React/Babel.",
+  "scripts": {
+    "test": "node validate.js"
+  },
+  "devDependencies": {
+    "@babel/standalone": "^8.0.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}

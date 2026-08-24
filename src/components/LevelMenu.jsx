@@ -2,7 +2,7 @@
 // de Música (que mostra as músicas do nível atualmente selecionado) — por
 // isso o atalho mora aqui no menu principal, e não dentro das abas de
 // estudo de um nível específico.
-function LevelMenu({ level, onSelectLevel, view, onSelectHome, onSelectMusic }) {
+function LevelMenu({ level, onSelectLevel, view, onSelectHome, onSelectMusic, onSelectThemes }) {
   const [open, setOpen] = useState(false);
   const currentLabel = LEVELS.find((l) => l.id === level)?.label ?? "";
 
@@ -18,6 +18,11 @@ function LevelMenu({ level, onSelectLevel, view, onSelectHome, onSelectMusic }) 
 
   function pickMusic() {
     onSelectMusic();
+    setOpen(false);
+  }
+
+  function pickThemes() {
+    onSelectThemes();
     setOpen(false);
   }
 
@@ -158,6 +163,27 @@ function LevelMenu({ level, onSelectLevel, view, onSelectHome, onSelectMusic }) 
           }}
         >
           MUSIC
+        </button>
+        <button
+          onClick={pickThemes}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            width: "100%",
+            textAlign: "left",
+            padding: "10px 12px",
+            marginTop: 6,
+            fontSize: 12,
+            borderRadius: 3,
+            border: `1px solid ${view === "themes" ? "#FFFFFF" : "#1F5C3B"}`,
+            background: view === "themes" ? "#FFFFFF" : "transparent",
+            color: view === "themes" ? "#053B22" : "#CFEFDC",
+            fontWeight: view === "themes" ? 700 : 400,
+            cursor: "pointer",
+          }}
+        >
+          THEMES
         </button>
 
         <AccountSection />

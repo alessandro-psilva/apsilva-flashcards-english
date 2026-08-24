@@ -4,7 +4,7 @@
 
 function FlashcardCatalog() {
   const [level, setLevel] = useState(DEFAULT_LEVEL);
-  const [view, setView] = useState("home"); // 'home' | 'study' | 'quiz' | 'gapfill' | 'memory' | 'sentence' | 'listening' | 'scramble' | 'phrases' | 'writing' | 'music' | 'summary'
+  const [view, setView] = useState("home"); // 'home' | 'study' | 'quiz' | 'gapfill' | 'memory' | 'sentence' | 'listening' | 'scramble' | 'phrases' | 'writing' | 'music' | 'themes' | 'summary'
   const [unit, setUnit] = useState(1);
   const [category, setCategory] = useState("All");
   const [reviewOnly, setReviewOnly] = useState(false);
@@ -159,6 +159,16 @@ function FlashcardCatalog() {
     setView("study");
   }
 
+  // Jumps straight to a prerequisite card's unit, without leaving the
+  // Study view — used by the "before this" badge on Grammar cards.
+  function jumpToUnit(u) {
+    setUnit(u);
+    setCategory("All");
+    setReviewOnly(false);
+    setIndex(0);
+    setFlipped(false);
+  }
+
   function changeCategory(cat) {
     setCategory(cat);
     setIndex(0);
@@ -277,6 +287,7 @@ function FlashcardCatalog() {
         view={view}
         onSelectHome={() => setView("home")}
         onSelectMusic={() => setView("music")}
+        onSelectThemes={() => setView("themes")}
       />
 
       <div style={{ width: "100%", maxWidth: 560 }}>
@@ -286,7 +297,7 @@ function FlashcardCatalog() {
             className="plex"
             style={{ fontSize: 11, letterSpacing: "0.28em", color: "#9FE6BE", marginBottom: 6 }}
           >
-            {view === "home" || view === "music"
+            {view === "home" || view === "music" || view === "themes"
               ? "FLASHCARDS ENGLISH"
               : (LEVELS.find((l) => l.id === level)?.label ?? "").toUpperCase()}
           </div>
@@ -296,6 +307,8 @@ function FlashcardCatalog() {
           >
             {view === "music"
               ? "Music"
+              : view === "themes"
+              ? "Themes"
               : view === "home"
               ? "Choose a level"
               : view === "summary"
@@ -363,6 +376,8 @@ function FlashcardCatalog() {
             onToggleMusic={() => setView(view === "music" ? "home" : "music")}
             songs={MUSIC}
           />
+        ) : view === "themes" ? (
+          <ThemeScreen cards={CARDS} />
         ) : view === "summary" ? (
           <SummaryScreen units={UNITS} cards={CARDS} status={status} onSelectUnit={openUnitFromSummary} onReset={resetProgress} />
         ) : (
@@ -595,6 +610,52 @@ function FlashcardCatalog() {
                         </div>
                         <SpeakButton text={card.ex} size={15} />
                       </div>
+
+                      {/* Grammar prerequisites — "before this, make sure you know…",
+                          color-coded by whether that prereq card is already marked known. */}
+                      {card.cat === "Grammar" && card.prereq && card.prereq.length > 0 && (
+                        <div style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 12 }}>
+                          {card.prereq.map((pid) => {
+                            const pcard = CARDS.find((c) => c.id === pid);
+                            if (!pcard) return null;
+                            const known = status[pid] === "know";
+                            return (
+                              <button
+                                key={pid}
+                                onClick={() => jumpToUnit(pcard.unit)}
+                                className="plex"
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "space-between",
+                                  gap: 6,
+                                  textAlign: "left",
+                                  padding: "6px 10px",
+                                  borderRadius: 4,
+                                  border: `1px solid ${known ? "#1F9D55" : "#C0504D"}`,
+                                  background: known ? "#DDF3E4" : "#FBEAEA",
+                                  color: known ? "#0B3D24" : "#8C2F2C",
+                                  fontSize: 10.5,
+                                  cursor: "pointer",
+                                }}
+                                title="Jump to this unit"
+                              >
+                                <span>📌 Before this: {pcard.front} (Unit {pcard.unit})</span>
+                                <span>{known ? "✓" : "→"}</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+
+                      {/* Word family — related forms of the same root word,
+                          for cards where that relation is genuinely useful. */}
+                      {card.cat === "Vocabulary" && card.family && card.family.length > 0 && (
+                        <div className="plex" style={{ fontSize: 10.5, color: "#8A6D14", lineHeight: 1.5, marginBottom: 12 }}>
+                          🔤 Word family: {card.family.map((f) => `${f.word} (${f.form})`).join(", ")}
+                        </div>
+                      )}
+
                       <div className="plex" style={{ fontSize: 11.5, color: "#3F7A5C", lineHeight: 1.5, marginTop: "auto" }}>
                         ✎ {card.note}
                       </div>

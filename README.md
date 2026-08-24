@@ -14,6 +14,9 @@ App de estudo de inglês com flashcards, quiz, frases pra praticar falando sobre
 - **Ordene a frase** — reconstrua a frase de exemplo de cada carta, embaralhada, tocando as palavras na ordem certa. Foca em estrutura/ordem gramatical.
 - **Contra o relógio (listening)** — ouça a pronúncia do termo e escolha o significado certo entre 4 opções antes o tempo acabar (8s por rodada). Único exercício focado em compreensão auditiva.
 - **Palavra embaralhada** — as letras de um termo (de uma palavra só) aparecem embaralhadas, com a tradução como dica; monte a palavra tocando as letras na ordem certa.
+- **Temas** — navegue o vocabulário por assunto (dinheiro, viagem, trabalho...) em vez de por unidade — cruza várias unidades de uma vez. Acessível pelo menu lateral, junto com Música.
+- **Pré-requisitos de gramática** — no verso de cada carta de Gramática, se aquele ponto depende de outro que vem antes (ex: Present Perfect depende de Past Simple), aparece um aviso com atalho pra pular direto pra unidade do pré-requisito.
+- **Família de palavras** — algumas cartas de Vocabulário mostram, no verso, formas relacionadas da mesma palavra (ex: "protect" → protection, protective), quando isso ajuda a fixar o termo.
 - **Frases** — frases por unidade para praticar falando sobre a própria vida, usando os mesmos termos das flashcards.
 - **Redação (Writing)** — um tema de redação original por bloco de duas unidades, com dica de vocabulário/gramática; o texto digitado fica salvo automaticamente (localStorage, ou na nuvem se estiver logado).
 - **Música** — vídeos oficiais do YouTube com dicção clara, pra praticar listening com legenda traduzida. O atalho fica no menu principal/lateral (não numa aba de estudo), mas a lista de músicas é específica do nível selecionado — cada nível cura suas próprias recomendações.
@@ -43,6 +46,7 @@ apsilva-flashcards-english/
 │   ├── firebaseConfig.js             # chaves do Firebase p/ login+sync na nuvem (opcional, veja abaixo)
 │   ├── data/
 │   │   ├── categories.js             # categorias de carta (Vocabulary/Grammar), compartilhadas entre níveis
+│   │   ├── themes.js                 # registro dos temas de vocabulário (dinheiro, viagem...), compartilhado entre níveis
 │   │   └── levels/
 │   │       ├── index.js              # registro central: lista de níveis + qual está disponível
 │   │       └── pre-intermediate.js   # unidades, cartas, frases e músicas do nível Pre-Intermediate
@@ -64,13 +68,14 @@ apsilva-flashcards-english/
 │       ├── MemoryScreen.jsx          # jogo da memória
 │       ├── SentenceBuilderScreen.jsx # ordene a frase
 │       ├── ListeningScreen.jsx       # contra o relógio (listening)
-│       └── WordScrambleScreen.jsx    # palavra embaralhada
+│       ├── WordScrambleScreen.jsx    # palavra embaralhada
+│       └── ThemeScreen.jsx           # navegar vocabulário por tema, cruzando unidades
 └── README.md
 ```
 
 ## Como adicionar um nível novo
 
-1. Crie `src/data/levels/<nivel>.js` com o mesmo formato de `pre-intermediate.js` (arrays `UNITS`/`CARDS`/`MUSIC`/`WRITING` e objeto `PHRASES`), usando um prefixo próprio pros nomes — ex. `INTERMEDIATE_UNITS`, `INTERMEDIATE_CARDS`, `INTERMEDIATE_PHRASES`, `INTERMEDIATE_MUSIC`, `INTERMEDIATE_WRITING`. `MUSIC` e `WRITING` podem começar como array vazio (`[]`) se ainda não tiver conteúdo pra esse nível — as telas de Música e Redação mostram uma mensagem de "ainda não tem" nesse caso. Gap-Fill, Jogo da memória, Ordene a frase e Palavra embaralhada não precisam de nada novo — funcionam automaticamente a partir das cartas de qualquer nível (Contra o relógio também, usando o mesmo áudio já usado no resto do app).
+1. Crie `src/data/levels/<nivel>.js` com o mesmo formato de `pre-intermediate.js` (arrays `UNITS`/`CARDS`/`MUSIC`/`WRITING` e objeto `PHRASES`), usando um prefixo próprio pros nomes — ex. `INTERMEDIATE_UNITS`, `INTERMEDIATE_CARDS`, `INTERMEDIATE_PHRASES`, `INTERMEDIATE_MUSIC`, `INTERMEDIATE_WRITING`. `MUSIC` e `WRITING` podem começar como array vazio (`[]`) se ainda não tiver conteúdo pra esse nível — as telas de Música e Redação mostram uma mensagem de "ainda não tem" nesse caso. Gap-Fill, Jogo da memória, Ordene a frase e Palavra embaralhada não precisam de nada novo — funcionam automaticamente a partir das cartas de qualquer nível (Contra o relógio também, usando o mesmo áudio já usado no resto do app). Já `themes` (nas cartas de Vocabulary) e `prereq`/`family` (nas cartas de Grammar/Vocabulary) são opcionais — sem eles, a carta funciona normalmente, só não aparece na tela de Temas nem mostra os avisos extras no verso.
 2. Liste esse arquivo em `FILES`, dentro de `index.html`, logo antes de `src/data/levels/index.js`.
 3. Em `src/data/levels/index.js`, registre o nível no objeto `LEVEL_DATA`.
 4. Ainda em `src/data/levels/index.js`, marque `available: true` na entrada correspondente da lista `LEVELS`.

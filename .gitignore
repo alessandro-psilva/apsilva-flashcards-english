@@ -5,3 +5,7 @@ docs/*
 # Pasta de arquivos marcados para exclusão manual (o Claude não consegue
 # deletar arquivos neste ambiente, só mover) — pode apagar quando quiser.
 _to_delete/
+
+# Dependências instaladas por `npm install`, usadas só pelo validate.js
+# (harness de teste) — não fazem parte do app em si, que roda sem build.
+node_modules/
