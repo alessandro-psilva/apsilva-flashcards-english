@@ -371,8 +371,8 @@ function FlashcardCatalog() {
                     fontSize: 10.5,
                     letterSpacing: "0.03em",
                     borderRadius: 3,
-                    border: `1px solid ${unit === u.id ? "#D4AF37" : "#1F5C3B"}`,
-                    background: unit === u.id ? "#D4AF37" : "transparent",
+                    border: `1px solid ${unit === u.id ? "#FFFFFF" : "#1F5C3B"}`,
+                    background: unit === u.id ? "#FFFFFF" : "transparent",
                     color: unit === u.id ? "#006437" : "#9FE6BE",
                     cursor: "pointer",
                     whiteSpace: "nowrap",
@@ -421,9 +421,9 @@ function FlashcardCatalog() {
                     fontSize: 11,
                     letterSpacing: "0.04em",
                     borderRadius: 3,
-                    border: `1px solid ${reviewOnly ? "#D4AF37" : "#2E7D52"}`,
-                    background: reviewOnly ? "#D4AF37" : "transparent",
-                    color: reviewOnly ? "#0B3D24" : "#CFEFDC",
+                    border: `1px solid ${reviewOnly ? "#C0504D" : "#2E7D52"}`,
+                    background: reviewOnly ? "#C0504D" : "transparent",
+                    color: reviewOnly ? "#FFFFFF" : "#CFEFDC",
                     fontWeight: reviewOnly ? 700 : 400,
                     cursor: "pointer",
                   }}
@@ -450,7 +450,7 @@ function FlashcardCatalog() {
             >
               <span>CARD {deck.length ? safeIndex + 1 : 0} / {deck.length}</span>
               <span style={{ color: "#4ADE80" }}>KNOWN: {known}</span>
-              <span style={{ color: "#D4AF37" }}>REVIEW: {review}</span>
+              <span style={{ color: "#E08A87" }}>REVIEW: {review}</span>
             </div>
 
             {/* Progress dots */}
@@ -469,7 +469,7 @@ function FlashcardCatalog() {
                         : status[c.id] === "know"
                         ? "#4ADE80"
                         : status[c.id] === "review"
-                        ? "#D4AF37"
+                        ? "#C0504D"
                         : "#1F5C3B",
                   }}
                 />
@@ -591,8 +591,8 @@ function FlashcardCatalog() {
                       flex: 1,
                       padding: "12px 0",
                       background: "transparent",
-                      border: "1px solid #D4AF37",
-                      color: "#D4AF37",
+                      border: "1px solid #C0504D",
+                      color: "#C0504D",
                       borderRadius: 4,
                       fontSize: 12,
                       letterSpacing: "0.06em",

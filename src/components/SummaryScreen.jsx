@@ -23,7 +23,7 @@ function SummaryScreen({ units, cards, status, onSelectUnit, onReset }) {
         </div>
         <div style={{ display: "flex", height: 8, borderRadius: 4, overflow: "hidden", background: "#DDEEE3", marginBottom: 8 }}>
           <div style={{ width: totalCards ? `${(totalKnow / totalCards) * 100}%` : "0%", background: "#1F9D55" }} />
-          <div style={{ width: totalCards ? `${(totalReview / totalCards) * 100}%` : "0%", background: "#D4AF37" }} />
+          <div style={{ width: totalCards ? `${(totalReview / totalCards) * 100}%` : "0%", background: "#8A6D14" }} />
         </div>
         <div className="plex" style={{ display: "flex", justifyContent: "space-between", fontSize: 11 }}>
           <span style={{ color: "#1F9D55" }}>KNOWN: {totalKnow}</span>
@@ -63,7 +63,7 @@ function SummaryScreen({ units, cards, status, onSelectUnit, onReset }) {
               </div>
               <div style={{ display: "flex", height: 5, borderRadius: 3, overflow: "hidden", background: "#DDEEE3" }}>
                 <div style={{ width: total ? `${(know / total) * 100}%` : "0%", background: "#1F9D55" }} />
-                <div style={{ width: total ? `${(rev / total) * 100}%` : "0%", background: "#D4AF37" }} />
+                <div style={{ width: total ? `${(rev / total) * 100}%` : "0%", background: "#8A6D14" }} />
               </div>
             </button>
           );

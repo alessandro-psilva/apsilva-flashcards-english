@@ -24,7 +24,7 @@ function HomeArt() {
       <text x="93" y="46" textAnchor="middle" fontSize="20" fontWeight="700" fill="#006437" fontFamily="Georgia, serif">
         A
       </text>
-      <line x1="52" y1="58" x2="110" y2="58" stroke="#D4AF37" strokeWidth="2" strokeLinecap="round" />
+      <line x1="52" y1="58" x2="110" y2="58" stroke="#006437" strokeWidth="2" strokeLinecap="round" />
     </svg>
   );
 }
@@ -60,7 +60,7 @@ function HomeScreen({ level, onSelectLevel, showMusic, onToggleMusic, songs }) {
                 textAlign: "left",
                 padding: "16px 18px",
                 borderRadius: 6,
-                border: `1px solid ${level === l.id && l.available ? "#D4AF37" : l.available ? "#BFE3CC" : "#1F5C3B"}`,
+                border: `1px solid ${level === l.id && l.available ? "#FFFFFF" : l.available ? "#BFE3CC" : "#1F5C3B"}`,
                 background: l.available ? "#F4FBF6" : "transparent",
                 boxShadow: l.available ? "0 6px 18px rgba(6,40,25,0.28), 0 1px 0 #fff inset" : "none",
                 cursor: l.available ? "pointer" : "not-allowed",
@@ -92,8 +92,8 @@ function HomeScreen({ level, onSelectLevel, showMusic, onToggleMusic, songs }) {
           textAlign: "center",
           padding: "14px 0",
           borderRadius: 6,
-          border: `1px solid ${showMusic ? "#D4AF37" : "#2E7D52"}`,
-          background: showMusic ? "#D4AF37" : "transparent",
+          border: `1px solid ${showMusic ? "#FFFFFF" : "#2E7D52"}`,
+          background: showMusic ? "#FFFFFF" : "transparent",
           color: showMusic ? "#053B22" : "#CFEFDC",
           fontWeight: showMusic ? 700 : 400,
           fontSize: 11,

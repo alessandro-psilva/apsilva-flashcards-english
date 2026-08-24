@@ -83,9 +83,9 @@ function AccountSection() {
               padding: "10px 12px",
               fontSize: 12,
               borderRadius: 3,
-              border: "1px solid #D4AF37",
+              border: "1px solid #FFFFFF",
               background: "transparent",
-              color: "#D4AF37",
+              color: "#FFFFFF",
               cursor: busy ? "default" : "pointer",
               opacity: busy ? 0.6 : 1,
             }}

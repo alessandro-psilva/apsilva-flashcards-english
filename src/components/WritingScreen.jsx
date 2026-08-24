@@ -90,7 +90,7 @@ function WritingScreen({ level, unit, prompts }) {
             fontSize: 11.5,
             color: "#8A6D14",
             lineHeight: 1.5,
-            borderLeft: "2px solid #D4AF37",
+            borderLeft: "2px solid #006437",
             paddingLeft: 10,
           }}
         >

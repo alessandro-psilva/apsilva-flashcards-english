@@ -17,7 +17,7 @@ function renderSentenceParts(sentence) {
           style={{
             fontStyle: "italic",
             color: "#8A6D14",
-            borderBottom: "1px dashed #D4AF37",
+            borderBottom: "1px dashed #C0504D",
           }}
         >
           {part.slice(1, -1)}
@@ -51,7 +51,7 @@ function PhraseScreen({ sentences }) {
         className="plex"
         style={{ fontSize: 11, color: "#BFEAD2", marginBottom: 14, padding: "0 4px", lineHeight: 1.6 }}
       >
-        Swap the <span style={{ fontStyle: "italic", color: "#D4AF37" }}>underlined</span> part for your own reality and practice saying it out loud.
+        Swap the <span style={{ fontStyle: "italic", color: "#C0504D" }}>underlined</span> part for your own reality and practice saying it out loud.
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         {sentences.map((sentence, i) => (

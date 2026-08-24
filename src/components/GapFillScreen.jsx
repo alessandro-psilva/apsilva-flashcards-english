@@ -131,7 +131,7 @@ function GapFillScreen({ deck }) {
             style={{
               display: "inline-block",
               minWidth: blankWidth,
-              borderBottom: `2px solid ${checked ? (correct ? "#1F9D55" : "#C0504D") : "#D4AF37"}`,
+              borderBottom: `2px solid ${checked ? (correct ? "#1F9D55" : "#C0504D") : "#C0504D"}`,
               color: checked ? (correct ? "#0B3D24" : "#8C2F2C") : "#006437",
               fontWeight: 700,
               textAlign: "center",
