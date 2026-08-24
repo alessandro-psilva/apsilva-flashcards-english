@@ -4,7 +4,7 @@
 
 function FlashcardCatalog() {
   const [level, setLevel] = useState(DEFAULT_LEVEL);
-  const [view, setView] = useState("home"); // 'home' | 'study' | 'quiz' | 'gapfill' | 'phrases' | 'writing' | 'music' | 'summary'
+  const [view, setView] = useState("home"); // 'home' | 'study' | 'quiz' | 'gapfill' | 'memory' | 'sentence' | 'listening' | 'scramble' | 'phrases' | 'writing' | 'music' | 'summary'
   const [unit, setUnit] = useState(1);
   const [category, setCategory] = useState("All");
   const [reviewOnly, setReviewOnly] = useState(false);
@@ -304,18 +304,30 @@ function FlashcardCatalog() {
               ? `Quiz · ${unitTitle}`
               : view === "gapfill"
               ? `Gap-Fill · ${unitTitle}`
+              : view === "memory"
+              ? `Memory Match · ${unitTitle}`
+              : view === "sentence"
+              ? `Sentence Builder · ${unitTitle}`
+              : view === "listening"
+              ? `Listening · ${unitTitle}`
+              : view === "scramble"
+              ? `Word Scramble · ${unitTitle}`
               : view === "phrases"
               ? `Phrases · ${unitTitle}`
               : view === "writing"
               ? `Writing · ${unitTitle}`
               : `Unit ${unit} · ${unitTitle}`}
           </h1>
-          {(view === "study" || view === "quiz" || view === "gapfill" || view === "phrases" || view === "writing" || view === "summary") && (
+          {(view === "study" || view === "quiz" || view === "gapfill" || view === "memory" || view === "sentence" || view === "listening" || view === "scramble" || view === "phrases" || view === "writing" || view === "summary") && (
             <div style={{ display: "flex", justifyContent: "center", gap: 6, flexWrap: "wrap" }}>
               {[
                 { key: "study", label: "STUDY" },
                 { key: "quiz", label: "QUIZ" },
                 { key: "gapfill", label: "GAP-FILL" },
+                { key: "memory", label: "MEMORY" },
+                { key: "sentence", label: "SENTENCE" },
+                { key: "listening", label: "LISTENING" },
+                { key: "scramble", label: "SCRAMBLE" },
                 { key: "phrases", label: "PHRASES" },
                 { key: "writing", label: "WRITING" },
                 { key: "summary", label: "SUMMARY" },
@@ -441,6 +453,14 @@ function FlashcardCatalog() {
               <QuizScreen deck={deck} allCards={CARDS} />
             ) : view === "gapfill" ? (
               <GapFillScreen deck={deck} />
+            ) : view === "memory" ? (
+              <MemoryScreen deck={deck} />
+            ) : view === "sentence" ? (
+              <SentenceBuilderScreen deck={deck} />
+            ) : view === "listening" ? (
+              <ListeningScreen deck={deck} allCards={CARDS} />
+            ) : view === "scramble" ? (
+              <WordScrambleScreen deck={deck} />
             ) : (
               <>
             {/* Stats bar */}

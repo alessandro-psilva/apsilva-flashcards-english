@@ -10,6 +10,10 @@ App de estudo de inglês com flashcards, quiz, frases pra praticar falando sobre
 - **Estudar** — flashcards com virada de carta (frente/verso), separadas por unidade e categoria (Vocabulário / Gramática), com botão de áudio para ouvir a pronúncia.
 - **Quiz** — perguntas de múltipla escolha geradas a partir das cartas da unidade selecionada, com placar final.
 - **Gap-Fill (completar lacunas)** — a frase de exemplo de cada carta aparece com a palavra-alvo escondida; digite o que falta. Gerado automaticamente a partir das próprias cartas (não precisa de conteúdo extra por nível).
+- **Jogo da memória** — vire duas cartas por vez tentando casar o termo em inglês com a tradução. Até 8 pares por rodada, gerados na hora a partir do deck selecionado.
+- **Ordene a frase** — reconstrua a frase de exemplo de cada carta, embaralhada, tocando as palavras na ordem certa. Foca em estrutura/ordem gramatical.
+- **Contra o relógio (listening)** — ouça a pronúncia do termo e escolha o significado certo entre 4 opções antes o tempo acabar (8s por rodada). Único exercício focado em compreensão auditiva.
+- **Palavra embaralhada** — as letras de um termo (de uma palavra só) aparecem embaralhadas, com a tradução como dica; monte a palavra tocando as letras na ordem certa.
 - **Frases** — frases por unidade para praticar falando sobre a própria vida, usando os mesmos termos das flashcards.
 - **Redação (Writing)** — um tema de redação original por bloco de duas unidades, com dica de vocabulário/gramática; o texto digitado fica salvo automaticamente (localStorage, ou na nuvem se estiver logado).
 - **Música** — vídeos oficiais do YouTube com dicção clara, pra praticar listening com legenda traduzida. O atalho fica no menu principal/lateral (não numa aba de estudo), mas a lista de músicas é específica do nível selecionado — cada nível cura suas próprias recomendações.
@@ -56,13 +60,17 @@ apsilva-flashcards-english/
 │       ├── WritingScreen.jsx         # tela de redação (tema + textarea com autosave)
 │       ├── MusicScreen.jsx
 │       ├── QuizScreen.jsx
-│       └── GapFillScreen.jsx         # tela de completar lacunas
+│       ├── GapFillScreen.jsx         # tela de completar lacunas
+│       ├── MemoryScreen.jsx          # jogo da memória
+│       ├── SentenceBuilderScreen.jsx # ordene a frase
+│       ├── ListeningScreen.jsx       # contra o relógio (listening)
+│       └── WordScrambleScreen.jsx    # palavra embaralhada
 └── README.md
 ```
 
 ## Como adicionar um nível novo
 
-1. Crie `src/data/levels/<nivel>.js` com o mesmo formato de `pre-intermediate.js` (arrays `UNITS`/`CARDS`/`MUSIC`/`WRITING` e objeto `PHRASES`), usando um prefixo próprio pros nomes — ex. `INTERMEDIATE_UNITS`, `INTERMEDIATE_CARDS`, `INTERMEDIATE_PHRASES`, `INTERMEDIATE_MUSIC`, `INTERMEDIATE_WRITING`. `MUSIC` e `WRITING` podem começar como array vazio (`[]`) se ainda não tiver conteúdo pra esse nível — as telas de Música e Redação mostram uma mensagem de "ainda não tem" nesse caso. Gap-Fill não precisa de nada novo — funciona automaticamente a partir das cartas de qualquer nível.
+1. Crie `src/data/levels/<nivel>.js` com o mesmo formato de `pre-intermediate.js` (arrays `UNITS`/`CARDS`/`MUSIC`/`WRITING` e objeto `PHRASES`), usando um prefixo próprio pros nomes — ex. `INTERMEDIATE_UNITS`, `INTERMEDIATE_CARDS`, `INTERMEDIATE_PHRASES`, `INTERMEDIATE_MUSIC`, `INTERMEDIATE_WRITING`. `MUSIC` e `WRITING` podem começar como array vazio (`[]`) se ainda não tiver conteúdo pra esse nível — as telas de Música e Redação mostram uma mensagem de "ainda não tem" nesse caso. Gap-Fill, Jogo da memória, Ordene a frase e Palavra embaralhada não precisam de nada novo — funcionam automaticamente a partir das cartas de qualquer nível (Contra o relógio também, usando o mesmo áudio já usado no resto do app).
 2. Liste esse arquivo em `FILES`, dentro de `index.html`, logo antes de `src/data/levels/index.js`.
 3. Em `src/data/levels/index.js`, registre o nível no objeto `LEVEL_DATA`.
 4. Ainda em `src/data/levels/index.js`, marque `available: true` na entrada correspondente da lista `LEVELS`.
