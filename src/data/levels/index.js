@@ -4,9 +4,12 @@
 //
 // Para adicionar um nível novo:
 //   1. Crie src/data/levels/<nivel>.js com as unidades/cartas/frases/músicas
-//      desse nível, no mesmo formato de pre-intermediate.js (troque o
-//      prefixo). A música também é por nível — cada nível cura sua própria
-//      lista de músicas, do jeito apropriado pra esse estágio.
+//      /temas de redação desse nível, no mesmo formato de
+//      pre-intermediate.js (troque o prefixo). Música e redação também são
+//      por nível — cada nível cura sua própria lista de músicas e escreve
+//      seus próprios temas de redação, do jeito apropriado pra esse
+//      estágio. Os exercícios de completar lacunas (gap-fill) não
+//      precisam de dado novo — são gerados a partir dos próprios cards.
 //   2. Liste esse arquivo em FILES, dentro do index.html, logo depois deste
 //      arquivo (src/data/levels/index.js já precisa ter carregado antes,
 //      então na prática o arquivo do nível entra ANTES deste no manifesto —
@@ -30,10 +33,11 @@ const LEVEL_DATA = {
     cards: PRE_INTERMEDIATE_CARDS,
     phrases: PRE_INTERMEDIATE_PHRASES,
     music: PRE_INTERMEDIATE_MUSIC,
+    writing: PRE_INTERMEDIATE_WRITING,
   },
 };
 
-const EMPTY_LEVEL_DATA = { units: [], cards: [], phrases: {}, music: [] };
+const EMPTY_LEVEL_DATA = { units: [], cards: [], phrases: {}, music: [], writing: [] };
 
 function getLevelData(levelId) {
   return LEVEL_DATA[levelId] ?? EMPTY_LEVEL_DATA;

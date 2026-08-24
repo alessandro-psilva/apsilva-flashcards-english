@@ -9,7 +9,9 @@ App de estudo de inglês com flashcards, quiz, frases pra praticar falando sobre
 - **Menu de níveis** — botão ☰ no canto abre um menu lateral com todos os níveis (Beginner, Elementary, Pre-Intermediate, Intermediate, Upper Intermediate, Advanced); só os níveis com conteúdo ficam clicáveis.
 - **Estudar** — flashcards com virada de carta (frente/verso), separadas por unidade e categoria (Vocabulário / Gramática), com botão de áudio para ouvir a pronúncia.
 - **Quiz** — perguntas de múltipla escolha geradas a partir das cartas da unidade selecionada, com placar final.
+- **Gap-Fill (completar lacunas)** — a frase de exemplo de cada carta aparece com a palavra-alvo escondida; digite o que falta. Gerado automaticamente a partir das próprias cartas (não precisa de conteúdo extra por nível).
 - **Frases** — frases por unidade para praticar falando sobre a própria vida, usando os mesmos termos das flashcards.
+- **Redação (Writing)** — um tema de redação original por bloco de duas unidades, com dica de vocabulário/gramática; o texto digitado fica salvo automaticamente (localStorage, ou na nuvem se estiver logado).
 - **Música** — vídeos oficiais do YouTube com dicção clara, pra praticar listening com legenda traduzida. O atalho fica no menu principal/lateral (não numa aba de estudo), mas a lista de músicas é específica do nível selecionado — cada nível cura suas próprias recomendações.
 - **Progresso salvo** — marque "já sei" / "revisar depois" em cada carta; o progresso fica salvo automaticamente por nível, então trocar de nível não mistura o progresso de um com o outro. Por padrão fica só no navegador local (localStorage); com login habilitado (veja "Sincronizar entre aparelhos" abaixo), sincroniza na nuvem.
 - **Login com Google (opcional)** — cada pessoa loga com a própria conta Google, pelo menu lateral, e o progresso passa a sincronizar entre todos os aparelhos dela automaticamente. É multiusuário de verdade: cada conta só vê o próprio progresso. Precisa de configuração (veja abaixo); sem configurar, o app funciona normalmente do jeito de sempre.
@@ -43,6 +45,7 @@ apsilva-flashcards-english/
 │   ├── utils/
 │   │   ├── helpers.js                # shuffle, textura de "papel pautado"
 │   │   ├── audio.js                  # pronúncia (áudio real via API + voz sintética como fallback)
+│   │   ├── gapfill.js                # acha, dentro da frase de exemplo, o trecho que vira lacuna
 │   │   └── cloud.js                  # login com Google + sincronização de progresso (Firebase, opcional)
 │   └── components/
 │       ├── SpeakButton.jsx
@@ -50,14 +53,16 @@ apsilva-flashcards-english/
 │       ├── LevelMenu.jsx             # menu lateral (níveis + música + conta)
 │       ├── SummaryScreen.jsx
 │       ├── PhraseScreen.jsx
+│       ├── WritingScreen.jsx         # tela de redação (tema + textarea com autosave)
 │       ├── MusicScreen.jsx
-│       └── QuizScreen.jsx
+│       ├── QuizScreen.jsx
+│       └── GapFillScreen.jsx         # tela de completar lacunas
 └── README.md
 ```
 
 ## Como adicionar um nível novo
 
-1. Crie `src/data/levels/<nivel>.js` com o mesmo formato de `pre-intermediate.js` (arrays `UNITS`/`CARDS`/`MUSIC` e objeto `PHRASES`), usando um prefixo próprio pros nomes — ex. `INTERMEDIATE_UNITS`, `INTERMEDIATE_CARDS`, `INTERMEDIATE_PHRASES`, `INTERMEDIATE_MUSIC`. `MUSIC` pode começar como um array vazio (`[]`) se ainda não tiver curadoria de músicas pra esse nível — a tela de Música mostra uma mensagem de "sem músicas ainda" nesse caso.
+1. Crie `src/data/levels/<nivel>.js` com o mesmo formato de `pre-intermediate.js` (arrays `UNITS`/`CARDS`/`MUSIC`/`WRITING` e objeto `PHRASES`), usando um prefixo próprio pros nomes — ex. `INTERMEDIATE_UNITS`, `INTERMEDIATE_CARDS`, `INTERMEDIATE_PHRASES`, `INTERMEDIATE_MUSIC`, `INTERMEDIATE_WRITING`. `MUSIC` e `WRITING` podem começar como array vazio (`[]`) se ainda não tiver conteúdo pra esse nível — as telas de Música e Redação mostram uma mensagem de "ainda não tem" nesse caso. Gap-Fill não precisa de nada novo — funciona automaticamente a partir das cartas de qualquer nível.
 2. Liste esse arquivo em `FILES`, dentro de `index.html`, logo antes de `src/data/levels/index.js`.
 3. Em `src/data/levels/index.js`, registre o nível no objeto `LEVEL_DATA`.
 4. Ainda em `src/data/levels/index.js`, marque `available: true` na entrada correspondente da lista `LEVELS`.

@@ -260,6 +260,11 @@ const PRE_INTERMEDIATE_CARDS = [
   { id: 172, unit: 16, cat: "Vocabulary", front: "a special atmosphere", back: "uma atmosfera especial", ex: "The venue used to be a factory — it has a very special atmosphere.", note: "'Atmosphere' = clima/ambiente de um lugar." },
   { id: 173, unit: 16, cat: "Vocabulary", front: "get arrested", back: "ser preso", ex: "He got arrested for driving without a licence.", note: "'Get' + particípio = construção passiva informal." },
   { id: 174, unit: 16, cat: "Vocabulary", front: "win an election", back: "vencer uma eleição", ex: "She won the election by a small margin.", note: "'Win an election' = vencer eleição." },
+
+  // Extra grammar — Unit 15 Money (completa o segundo ponto gramatical da
+  // unidade, que ainda não tinha um card próprio: sequenciar uma história
+  // ou processo com palavras de tempo, mantendo o tempo verbal consistente).
+  { id: 175, unit: 15, cat: "Grammar", front: "Time Phrases — sequenciando uma história", back: "Palavras como first, then, after that e eventually organizam a ordem dos eventos e ajudam a manter o mesmo tempo verbal do início ao fim.", ex: "First, I saved some money. Then, I opened a savings account, and eventually I bought my first car.", note: "Mantenha o mesmo tempo verbal (aqui, Past Simple) em toda a sequência." },
 ];
 
 // chunks from CARDS. **bold** marks the target chunk; [brackets] mark the
@@ -476,4 +481,75 @@ const PRE_INTERMEDIATE_MUSIC = [
   { title: "Just the Way You Are", artist: "Bruno Mars", videoId: "LjhCEhWiKXk", note: "Vocabulário simples de elogios e sentimentos, ritmo pop acessível." },
   { title: "Stay With Me", artist: "Sam Smith", videoId: "pB-5XG-DbAA", note: "Curta e lenta, frases repetidas facilitam o acompanhamento." },
   { title: "Counting Stars", artist: "OneRepublic", videoId: "hT_nvWreIhg", note: "Ritmo mais acelerado, bom desafio depois das mais lentas." },
+];
+
+// Temas de redação (simulado de escrita), um por bloco de duas unidades —
+// tema e dica escritos originalmente para este app, não copiados de
+// nenhuma fonte externa. O bloco certo é escolhido automaticamente pela
+// unidade selecionada (veja src/components/WritingScreen.jsx).
+const PRE_INTERMEDIATE_WRITING = [
+  {
+    id: 1,
+    fromUnit: 1,
+    toUnit: 2,
+    title: "A Work Update",
+    prompt: "Write a short post (60–100 words) about your job — or a job you'd like to have one day. Say what you do, what a normal day looks like, and one thing you like or find difficult about it.",
+    tip: "Tente usar pelo menos 3 palavras do vocabulário das Units 1–2 (ex: apply for a job, work part-time, get a refund).",
+  },
+  {
+    id: 2,
+    fromUnit: 3,
+    toUnit: 4,
+    title: "A Trip That Didn't Go as Planned",
+    prompt: "Tell a short story (60–100 words) about a trip, a meal, or a journey that didn't go the way you expected. What happened, and how did you feel?",
+    tip: "Use o Past Simple para a história e experimente o Past Continuous pra descrever o que estava acontecendo (ex: 'I was waiting for the bus when...').",
+  },
+  {
+    id: 3,
+    fromUnit: 5,
+    toUnit: 6,
+    title: "How I Relax, and Who I Relax With",
+    prompt: "Write a short personal profile (60–100 words): what do you do in your free time to relax, and who is one person (family or friend) you like spending that time with?",
+    tip: "Combine o vocabulário das Units 5–6 (sport, hobbies, family) com um superlativo, tipo 'the most relaxing thing I do is...'.",
+  },
+  {
+    id: 4,
+    fromUnit: 7,
+    toUnit: 8,
+    title: "Where I Live, and What I'm Learning",
+    prompt: "Describe (60–100 words) the place where you live and something you're currently learning or would like to learn.",
+    tip: "Pra descrever o lugar, use 'there is / there are'; pra falar do aprendizado, tente 'have to' / 'don't have to'.",
+  },
+  {
+    id: 5,
+    fromUnit: 9,
+    toUnit: 10,
+    title: "Holiday News",
+    prompt: "Write a short message (60–100 words) giving news about a real or imaginary trip — where you stayed, something that happened to your health or body, and one piece of advice you'd give someone going to the same place.",
+    tip: "Use 'used to' pra comparar como era antes da viagem, e 'should' ou 'had better' pro conselho.",
+  },
+  {
+    id: 6,
+    fromUnit: 11,
+    toUnit: 12,
+    title: "Plans and News",
+    prompt: "Write about plans and arrangements you're making for the next few weeks, or retell an interesting news story (real or invented) using reported speech.",
+    tip: "Se escolher contar uma notícia, tente usar discurso indireto: 'She said that...' / 'He told me that...'.",
+  },
+  {
+    id: 7,
+    fromUnit: 13,
+    toUnit: 14,
+    title: "A Short Review",
+    prompt: "Write a short article (60–100 words) about a film, show, or piece of music you like. What is it about, and why do you recommend it?",
+    tip: "Use orações relativas pra dar mais detalhe: 'It's a film which/that...' ou 'It's about a person who...'.",
+  },
+  {
+    id: 8,
+    fromUnit: 15,
+    toUnit: 16,
+    title: "You're Invited",
+    prompt: "Write an invitation (60–100 words) to an event you're organizing. Include what it is, when and where it happens, and anything guests need to know about cost or what to bring.",
+    tip: "Pra falar de custo hipotético, experimente o Second Conditional: 'If everyone paid $10, we could...'.",
+  },
 ];

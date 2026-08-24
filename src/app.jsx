@@ -4,7 +4,7 @@
 
 function FlashcardCatalog() {
   const [level, setLevel] = useState(DEFAULT_LEVEL);
-  const [view, setView] = useState("home"); // 'home' | 'study' | 'quiz' | 'phrases' | 'music' | 'summary'
+  const [view, setView] = useState("home"); // 'home' | 'study' | 'quiz' | 'gapfill' | 'phrases' | 'writing' | 'music' | 'summary'
   const [unit, setUnit] = useState(1);
   const [category, setCategory] = useState("All");
   const [reviewOnly, setReviewOnly] = useState(false);
@@ -15,7 +15,7 @@ function FlashcardCatalog() {
   const [loaded, setLoaded] = useState(false);
 
   // Dados do nível atual — trocar de nível troca UNITS/CARDS/PHRASES juntos.
-  const { units: UNITS, cards: CARDS, phrases: PHRASES, music: MUSIC } = useMemo(
+  const { units: UNITS, cards: CARDS, phrases: PHRASES, music: MUSIC, writing: WRITING } = useMemo(
     () => getLevelData(level),
     [level]
   );
@@ -302,16 +302,22 @@ function FlashcardCatalog() {
               ? "Progress Summary"
               : view === "quiz"
               ? `Quiz · ${unitTitle}`
+              : view === "gapfill"
+              ? `Gap-Fill · ${unitTitle}`
               : view === "phrases"
               ? `Phrases · ${unitTitle}`
+              : view === "writing"
+              ? `Writing · ${unitTitle}`
               : `Unit ${unit} · ${unitTitle}`}
           </h1>
-          {(view === "study" || view === "quiz" || view === "phrases" || view === "summary") && (
+          {(view === "study" || view === "quiz" || view === "gapfill" || view === "phrases" || view === "writing" || view === "summary") && (
             <div style={{ display: "flex", justifyContent: "center", gap: 6, flexWrap: "wrap" }}>
               {[
                 { key: "study", label: "STUDY" },
                 { key: "quiz", label: "QUIZ" },
+                { key: "gapfill", label: "GAP-FILL" },
                 { key: "phrases", label: "PHRASES" },
+                { key: "writing", label: "WRITING" },
                 { key: "summary", label: "SUMMARY" },
               ].map((v) => (
                 <button
@@ -378,8 +384,9 @@ function FlashcardCatalog() {
               ))}
             </div>
 
-            {/* Category tabs */}
-            {view !== "phrases" && (
+            {/* Category tabs — hidden on Phrases and Writing, which aren't
+                filtered by Vocabulary/Grammar. */}
+            {view !== "phrases" && view !== "writing" && (
               <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
                 {CATEGORIES.map((cat) => (
                   <button
@@ -403,7 +410,7 @@ function FlashcardCatalog() {
               </div>
             )}
 
-            {view !== "phrases" && (
+            {view !== "phrases" && view !== "writing" && (
               <div style={{ display: "flex", justifyContent: "center", marginBottom: 18 }}>
                 <button
                   onClick={toggleReviewOnly}
@@ -428,8 +435,12 @@ function FlashcardCatalog() {
 
             {view === "phrases" ? (
               <PhraseScreen sentences={PHRASES[unit] || []} />
+            ) : view === "writing" ? (
+              <WritingScreen level={level} unit={unit} prompts={WRITING} />
             ) : view === "quiz" ? (
               <QuizScreen deck={deck} allCards={CARDS} />
+            ) : view === "gapfill" ? (
+              <GapFillScreen deck={deck} />
             ) : (
               <>
             {/* Stats bar */}
