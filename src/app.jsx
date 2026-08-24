@@ -4,7 +4,7 @@
 
 function FlashcardCatalog() {
   const [level, setLevel] = useState(DEFAULT_LEVEL);
-  const [view, setView] = useState("home"); // 'home' | 'study' | 'quiz' | 'gapfill' | 'memory' | 'sentence' | 'listening' | 'scramble' | 'phrases' | 'writing' | 'music' | 'themes' | 'summary'
+  const [view, setView] = useState("home"); // 'home' | 'study' | 'quiz' | 'gapfill' | 'memory' | 'sentence' | 'listening' | 'scramble' | 'phrases' | 'writing' | 'music' | 'themes' | 'mywords' | 'summary'
   const [unit, setUnit] = useState(1);
   const [category, setCategory] = useState("All");
   const [reviewOnly, setReviewOnly] = useState(false);
@@ -288,6 +288,7 @@ function FlashcardCatalog() {
         onSelectHome={() => setView("home")}
         onSelectMusic={() => setView("music")}
         onSelectThemes={() => setView("themes")}
+        onSelectMyWords={() => setView("mywords")}
       />
 
       <div style={{ width: "100%", maxWidth: 560 }}>
@@ -297,7 +298,7 @@ function FlashcardCatalog() {
             className="plex"
             style={{ fontSize: 11, letterSpacing: "0.28em", color: "#9FE6BE", marginBottom: 6 }}
           >
-            {view === "home" || view === "music" || view === "themes"
+            {view === "home" || view === "music" || view === "themes" || view === "mywords"
               ? "FLASHCARDS ENGLISH"
               : (LEVELS.find((l) => l.id === level)?.label ?? "").toUpperCase()}
           </div>
@@ -309,6 +310,8 @@ function FlashcardCatalog() {
               ? "Music"
               : view === "themes"
               ? "Themes"
+              : view === "mywords"
+              ? "My Words"
               : view === "home"
               ? "Choose a level"
               : view === "summary"
@@ -378,6 +381,8 @@ function FlashcardCatalog() {
           />
         ) : view === "themes" ? (
           <ThemeScreen cards={CARDS} />
+        ) : view === "mywords" ? (
+          <MyWordsScreen />
         ) : view === "summary" ? (
           <SummaryScreen units={UNITS} cards={CARDS} status={status} onSelectUnit={openUnitFromSummary} onReset={resetProgress} />
         ) : (

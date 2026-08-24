@@ -26,6 +26,7 @@ const FILES = [
   "src/utils/helpers.js",
   "src/utils/audio.js",
   "src/utils/gapfill.js",
+  "src/utils/lookup.js",
   "src/components/SpeakButton.jsx",
   "src/components/AccountSection.jsx",
   "src/components/HomeScreen.jsx",
@@ -40,6 +41,7 @@ const FILES = [
   "src/components/ListeningScreen.jsx",
   "src/components/WordScrambleScreen.jsx",
   "src/components/ThemeScreen.jsx",
+  "src/components/MyWordsScreen.jsx",
   "src/components/LevelMenu.jsx",
   "src/app.jsx",
 ];
@@ -320,11 +322,45 @@ check("ThemeScreen (theme picker)", () => {
 });
 
 // ---------------------------------------------------------------------
+// My Words (word lookup)
+// ---------------------------------------------------------------------
+check("MyWordsScreen (initial state)", () => {
+  // Static render only — the saved-words load happens in a useEffect,
+  // which SSR never runs, so `loaded` stays false here (same as any
+  // other screen's first paint before its effect fires). Just confirm
+  // the search UI itself renders.
+  const html = ReactDOMServer.renderToStaticMarkup(React.createElement(MyWordsScreen));
+  if (!html.includes("Word to look up") && !html.includes("SEARCH")) throw new Error("Expected the search box to render.");
+  return html;
+});
+
+// ---------------------------------------------------------------------
 // Full app smoke test
 // ---------------------------------------------------------------------
 check("FlashcardCatalog (default = home view)", () =>
   ReactDOMServer.renderToStaticMarkup(React.createElement(FlashcardCatalog))
 );
 
-console.log(ok ? "\nALL CHECKS PASSED" : "\nSOME CHECKS FAILED");
-process.exit(ok ? 0 : 1);
+// Everything above this point is synchronous; this last check is async
+// (fetch is mocked to always reject in this harness) so it needs its own
+// await before we can safely process.exit() — confirms lookupWord()
+// degrades to its friendly, UI-safe error message instead of throwing
+// something unexpected (a raw network error, undefined access, etc.)
+// all the way up to the caller.
+(async () => {
+  try {
+    await lookupWord("anything");
+    ok = false;
+    console.error("FAIL: lookupWord() should reject when the network is unavailable, but resolved instead.");
+  } catch (err) {
+    if (typeof err.message !== "string" || !err.message.includes("Couldn't find")) {
+      ok = false;
+      console.error("FAIL: lookupWord()'s offline error message isn't the expected friendly one:", err.message);
+    } else {
+      console.log("OK  lookupWord() degrades gracefully when the network is unavailable");
+    }
+  }
+
+  console.log(ok ? "\nALL CHECKS PASSED" : "\nSOME CHECKS FAILED");
+  process.exit(ok ? 0 : 1);
+})();

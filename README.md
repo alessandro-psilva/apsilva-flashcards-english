@@ -17,6 +17,7 @@ App de estudo de inglês com flashcards, quiz, frases pra praticar falando sobre
 - **Temas** — navegue o vocabulário por assunto (dinheiro, viagem, trabalho...) em vez de por unidade — cruza várias unidades de uma vez. Acessível pelo menu lateral, junto com Música.
 - **Pré-requisitos de gramática** — no verso de cada carta de Gramática, se aquele ponto depende de outro que vem antes (ex: Present Perfect depende de Past Simple), aparece um aviso com atalho pra pular direto pra unidade do pré-requisito.
 - **Família de palavras** — algumas cartas de Vocabulário mostram, no verso, formas relacionadas da mesma palavra (ex: "protect" → protection, protective), quando isso ajuda a fixar o termo.
+- **My Words** — pesquise qualquer palavra (em inglês ou português) e veja definição, exemplo e tradução na hora, puxando de duas APIs gratuitas (Free Dictionary API + MyMemory Translation API). Salve as que quiser — ficam num banco de palavras pessoal, separado do conteúdo do livro — e baixe tudo em JSON ou CSV pra usar fora do app. Acessível pelo menu lateral.
 - **Frases** — frases por unidade para praticar falando sobre a própria vida, usando os mesmos termos das flashcards.
 - **Redação (Writing)** — um tema de redação original por bloco de duas unidades, com dica de vocabulário/gramática; o texto digitado fica salvo automaticamente (localStorage, ou na nuvem se estiver logado).
 - **Música** — vídeos oficiais do YouTube com dicção clara, pra praticar listening com legenda traduzida. O atalho fica no menu principal/lateral (não numa aba de estudo), mas a lista de músicas é específica do nível selecionado — cada nível cura suas próprias recomendações.
@@ -33,6 +34,7 @@ App de estudo de inglês com flashcards, quiz, frases pra praticar falando sobre
 - React (via CDN, sem build/npm)
 - Vários arquivos `.js`/`.jsx`, carregados em sequência pelo `index.html` e compilados no navegador com Babel Standalone — sem passo de build, então continua publicando direto no GitHub Pages a partir da própria branch
 - Hospedado gratuitamente no GitHub Pages
+- A tela **My Words** é a única parte do app que depende de rede em tempo real (além do áudio/login) — usa duas APIs públicas gratuitas: [Free Dictionary API](https://dictionaryapi.dev/) (definição em inglês) e [MyMemory Translation API](https://mymemory.translated.net/) (tradução PT↔EN, sem necessidade de chave/cadastro). Se alguma das duas estiver fora do ar, a busca falha com uma mensagem amigável — o resto do app não é afetado.
 
 ## Estrutura do projeto
 
@@ -54,6 +56,7 @@ apsilva-flashcards-english/
 │   │   ├── helpers.js                # shuffle, textura de "papel pautado"
 │   │   ├── audio.js                  # pronúncia (áudio real via API + voz sintética como fallback)
 │   │   ├── gapfill.js                # acha, dentro da frase de exemplo, o trecho que vira lacuna
+│   │   ├── lookup.js                 # busca definição + tradução pra My Words (Free Dictionary API + MyMemory)
 │   │   └── cloud.js                  # login com Google + sincronização de progresso (Firebase, opcional)
 │   └── components/
 │       ├── SpeakButton.jsx
@@ -69,7 +72,8 @@ apsilva-flashcards-english/
 │       ├── SentenceBuilderScreen.jsx # ordene a frase
 │       ├── ListeningScreen.jsx       # contra o relógio (listening)
 │       ├── WordScrambleScreen.jsx    # palavra embaralhada
-│       └── ThemeScreen.jsx           # navegar vocabulário por tema, cruzando unidades
+│       ├── ThemeScreen.jsx           # navegar vocabulário por tema, cruzando unidades
+│       └── MyWordsScreen.jsx         # busca + banco pessoal de palavras (My Words)
 └── README.md
 ```
 
