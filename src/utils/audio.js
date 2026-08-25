@@ -64,8 +64,22 @@ async function playPronunciation(text) {
         audioCache[key] = url;
       }
       if (url) {
+        // Play the real recording, but fall back to the synthetic voice
+        // if it fails for ANY reason — a blocked autoplay (play() can
+        // reject if the browser decided too much time passed since the
+        // click), a broken/expired audio URL (the 'error' event), a
+        // network drop mid-load. Without this fallback, a failure here
+        // used to mean total silence — the bug behind "às vezes o som
+        // não sai".
+        let usedFallback = false;
+        const fallbackToSyntheticVoice = () => {
+          if (usedFallback) return;
+          usedFallback = true;
+          speak(text);
+        };
         const audio = new Audio(url);
-        audio.play();
+        audio.addEventListener("error", fallbackToSyntheticVoice);
+        audio.play().catch(fallbackToSyntheticVoice);
         return;
       }
     } catch {

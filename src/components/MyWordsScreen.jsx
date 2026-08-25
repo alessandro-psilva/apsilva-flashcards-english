@@ -199,7 +199,9 @@ function MyWordsScreen() {
               {result.partOfSpeech.toUpperCase()}
             </div>
           )}
-          <div style={{ fontSize: 14, color: "#1F4A34", marginBottom: 8, lineHeight: 1.5 }}>{result.definition}</div>
+          {result.definition && (
+            <div style={{ fontSize: 14, color: "#1F4A34", marginBottom: 8, lineHeight: 1.5 }}>{result.definition}</div>
+          )}
           {result.example && (
             <div style={{ fontSize: 13, color: "#3F7A5C", fontStyle: "italic", marginBottom: 8 }}>"{result.example}"</div>
           )}

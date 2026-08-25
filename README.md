@@ -27,7 +27,7 @@ App de estudo de inglês com flashcards, quiz, frases pra praticar falando sobre
 
 ## Conteúdo (Pre-Intermediate)
 
-16 unidades, cobrindo vocabulário e gramática do livro (colocações e regras gramaticais reais do material, com frases de exemplo escritas originalmente para este app).
+16 unidades, cobrindo vocabulário e gramática do livro (colocações e regras gramaticais reais do material, com frases de exemplo escritas originalmente para este app). Ao todo: 409 cartas de Vocabulário (~25 por unidade) e 47 cartas de Gramática — a lista de termos foi ampliada a partir do índice de palavras do Vocabulary Builder do livro (usado só como checklist; toda tradução, exemplo e explicação foi escrita do zero para o app, sem copiar texto do livro).
 
 ## Tecnologia
 

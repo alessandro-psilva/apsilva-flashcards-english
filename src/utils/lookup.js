@@ -43,6 +43,13 @@ async function translate(text, from, to) {
 // Accepts a word/phrase in EITHER English or Portuguese and returns a
 // combined result. Throws a friendly Error (safe to show directly in the
 // UI) if nothing usable was found.
+//
+// Important: the Free Dictionary API only really indexes single
+// dictionary words — a short collocation like "get a refund" (exactly
+// the style this app's own cards already use) will 404 there even
+// though it's perfectly valid English. So a missing `def` does NOT mean
+// "not found" by itself — we still fall back to a translation-only
+// result via MyMemory (which handles phrases fine) before giving up.
 async function lookupWord(rawInput) {
   const input = (rawInput || "").trim();
   if (!input) throw new Error("Type a word first.");
@@ -61,28 +68,32 @@ async function lookupWord(rawInput) {
     // Wasn't found as English — assume it's Portuguese, translate it,
     // and look up the definition for the translated term instead.
     const asEnglish = await translate(input, "pt", "en");
-    if (asEnglish) {
+    if (asEnglish && asEnglish.trim().toLowerCase() !== input.toLowerCase()) {
       try {
         def = await fetchEnglishDefinition(asEnglish);
       } catch {
         def = null;
       }
-      if (def) englishTerm = asEnglish;
+      englishTerm = asEnglish;
     }
   }
 
-  if (!def) {
-    throw new Error(`Couldn't find "${input}" — check the spelling, or try a simpler word or phrase.`);
+  // Whether or not a formal dictionary definition was found, always try
+  // a translation too — this is what rescues phrases/collocations, which
+  // won't have a `def` at all but translate just fine.
+  const ptMeaningRaw = await translate(englishTerm, "en", "pt");
+  const ptMeaning = ptMeaningRaw && ptMeaningRaw.trim().toLowerCase() !== englishTerm.trim().toLowerCase() ? ptMeaningRaw : "";
+
+  if (!def && !ptMeaning) {
+    throw new Error(`Couldn't find "${input}" — check the spelling, or try a different word or phrase.`);
   }
 
-  const ptMeaning = await translate(englishTerm, "en", "pt");
-
   return {
-    term: def.word || englishTerm,
-    partOfSpeech: def.partOfSpeech,
-    definition: def.definition,
-    example: def.example,
-    phonetic: def.phonetic,
-    ptMeaning: ptMeaning || "",
+    term: def?.word || englishTerm,
+    partOfSpeech: def?.partOfSpeech || "",
+    definition: def?.definition || "",
+    example: def?.example || "",
+    phonetic: def?.phonetic || "",
+    ptMeaning,
   };
 }
